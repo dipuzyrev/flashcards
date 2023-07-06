@@ -29,6 +29,7 @@ const TranslateResult = ({ navigation, route }) => {
   const handleResponse = (response) => {
     const definitions = response.split('***').map(item => {
       const rawText = item.trim();
+      if (!rawText) return null;
       const wordType = rawText.match(/\[T\]\{(.*?)\}/)[1];
       const definition = rawText.match(/\[D\]\{(.*?)\}/)[1];
       const example = rawText.match(/\[E\]\{(.*?)\}/)[1];
@@ -39,7 +40,7 @@ const TranslateResult = ({ navigation, route }) => {
         example,
         synonyms,
       }
-    });
+    }).filter(item => item);
     setData(definitions);
   }
 
@@ -73,7 +74,6 @@ const TranslateResult = ({ navigation, route }) => {
     }).catch((error) => {
       console.log(error);
     });
-    // console.log(chatCompletion.data.choices[0].message);
   }
 
   React.useEffect(() => {
