@@ -27,13 +27,17 @@ const TranslateResult = ({ navigation, route }) => {
   const [data, setData] = React.useState([]);
 
   const handleResponse = (response) => {
-    const definitions = response.split('–––').map((item) => {
-      const [definition, wordType, example, ...synonyms] = item.trim().split('\n');
+    const definitions = response.split('***').map(item => {
+      const rawText = item.trim();
+      const wordType = rawText.match(/\[T\]\{(.*?)\}/)[1];
+      const definition = rawText.match(/\[D\]\{(.*?)\}/)[1];
+      const example = rawText.match(/\[E\]\{(.*?)\}/)[1];
+      const synonyms = rawText.match(/\[S\]\{(.*?)\}/)[1].split('|');
       return {
-        definition: definition.replace('D: ', ''),
-        wordType: wordType.replace('T: ', ''),
-        example: example.replace('E: ', ''),
-        synonyms: synonyms.join(' ').replace('S: ', '').split(' '),
+        wordType,
+        definition,
+        example,
+        synonyms,
       }
     });
     setData(definitions);
@@ -47,18 +51,15 @@ const TranslateResult = ({ navigation, route }) => {
 
     let prompt = `Common meanings for word "${text}". Explanations shouldn't be longer than 5-8 words and should consist of basic vocabulary where possible. For each explanation provide simple example of usage, type of word (part of speed or "idiom" if it is) and few synonyms corresponding to the explanation. `
 
-    prompt += `\nEach definition should be separated by new line and triple dash (–––). Each definition format: \n
-      D: <definition> \n
-      T: <type> \n
-      E: <example> \n
-      S: <synonym1> <synonym2> <synonym3> \n
+    prompt += `\nEach definition should be separated with 3 asterics (***). Each definition format: 
+      [T]{<type>}[D]{<definition>}[E]{<example>}[S]{<synonym1>|<synonym2>...>}
     `;
 
     if (contextPhrase) {
-      prompt += `\nShow only definitions which correspond to meaning of this word in following sentence: ${contextPhrase} `
+      prompt += `\nShow only definitions which correspond to meaning of this word in following sentence: ${contextPhrase}`
     }
 
-    console.log('prompt', prompt);
+    // console.log('prompt', prompt);
 
     openai.createChatCompletion({
       model: "gpt-3.5-turbo",
