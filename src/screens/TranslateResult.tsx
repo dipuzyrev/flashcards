@@ -33,12 +33,12 @@ const TranslateResult = ({ navigation, route }) => {
       const wordType = rawText.match(/\[T\]\{(.*?)\}/)[1];
       const definition = rawText.match(/\[D\]\{(.*?)\}/)[1];
       const example = rawText.match(/\[E\]\{(.*?)\}/)[1];
-      const synonyms = rawText.match(/\[S\]\{(.*?)\}/)[1].split('|');
+      const synonyms = rawText.match(/\[S\]\{(.*?)\}/)[1];
       return {
         wordType,
         definition,
         example,
-        synonyms,
+        synonyms: synonyms.trim() ? synonyms.trim().split('|') : [],
       }
     }).filter(item => item);
     setData(definitions);
@@ -50,24 +50,27 @@ const TranslateResult = ({ navigation, route }) => {
     });
     const openai = new OpenAIApi(configuration);
 
-    let prompt = `Common meanings for word "${text}". Explanations shouldn't be longer than 5-8 words and should consist of basic vocabulary where possible. For each explanation provide simple example of usage, type of word (part of speed or "idiom" if it is) and few synonyms corresponding to the explanation. `
+    let prompt = `
+      You are the English language assistant. 
+      For a given word provide it's common and widely used meanings, example of usage, synonyms and part of speech.
+      Use Oxford dictionary as a source of information. 
+      Use basic vocabulary in meanings and examples. 
+      Keep meaning as short as possible, aim to about 6-8 words. 
+      Avoid using word in meaning.
+      Avoid using punctuation marks and capital letters in meaning. 
+      Response format: \n
+      Each meaning: [T]{<type>}[D]{<meaning>}[E]{<example>}[S]{<synonym1>|<synonym2>|<synonym3>}.
+      If needed, list less synonyms or return "" instead of <synonym> if there is no synonyms found.
+      Separate meanings from each other with 3 asterics (***). \n
 
-    prompt += `\nEach definition should be separated with 3 asterics (***). Each definition format: 
-      [T]{<type>}[D]{<definition>}[E]{<example>}[S]{<synonym1>|<synonym2>...>}
-    `;
-
-    if (contextPhrase) {
-      prompt += `\nShow only definitions which correspond to meaning of this word in following sentence: ${contextPhrase}`
-    }
-
-    // console.log('prompt', prompt);
+      Word: ${text}`;
+    prompt += contextPhrase ? `; only meaning in the context of: ${contextPhrase}` : ''
+    prompt += `\nResponse: `;
 
     openai.createChatCompletion({
       model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: "You are English language professional helping user to create flashcards to learn words." },
-        { role: "user", content: prompt }
-      ],
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0,
     }).then((response) => {
       console.log(response.data.choices[0].message.content);
       handleResponse(response.data.choices[0].message.content);
