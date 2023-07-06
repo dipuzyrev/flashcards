@@ -38,7 +38,7 @@ const TranslateResult = ({ navigation, route }) => {
         wordType,
         definition,
         example,
-        synonyms: synonyms.trim() ? synonyms.trim().split('|') : [],
+        synonyms: synonyms.trim() && synonyms.trim() != '""' ? synonyms.trim().split('|') : ['-'],
       }
     }).filter(item => item);
     setData(definitions);
@@ -64,8 +64,7 @@ const TranslateResult = ({ navigation, route }) => {
       Separate meanings from each other with 3 asterics (***). \n
 
       Word: ${text}`;
-    prompt += contextPhrase ? `; only meaning in the context of: ${contextPhrase}` : ''
-    prompt += `\nResponse: `;
+    prompt += contextPhrase ? `; only meaning in the context of: ${contextPhrase}` : '';
 
     openai.createChatCompletion({
       model: "gpt-3.5-turbo",
