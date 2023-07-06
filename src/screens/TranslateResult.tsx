@@ -119,7 +119,7 @@ const TranslateResult = ({ navigation, route }) => {
                   <Text style={{ color: '#777' }}>{item.wordType}</Text>
                   <Text style={{ paddingVertical: 10, fontSize: 18, }}>{item.definition}</Text>
                   <Text><Text style={{ fontWeight: 'bold' }}>Example:</Text> {item.example}</Text>
-                  <Text><Text style={{ fontWeight: 'bold' }}>Synonyms:</Text> {item.synonyms.join(' ')}</Text>
+                  <Text><Text style={{ fontWeight: 'bold' }}>Synonyms:</Text> {item.synonyms.join(', ')}</Text>
                 </Pressable>
               ))
               }
