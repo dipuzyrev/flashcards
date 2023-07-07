@@ -1,8 +1,8 @@
 import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState, store} from '~/store/store';
-import {supermemo, SuperMemoItem, SuperMemoGrade} from 'supermemo';
 import dayjs from 'dayjs';
-import {Definition, Flashcard} from '~/store/types';
+import {Definition, Flashcard, SuperMemoGrade} from '~/store/types';
+import {srsFunc} from '~/utils/srs/anki-like';
 
 interface FlashcardsState {
   definitions: Record<number, Definition>;
@@ -45,7 +45,7 @@ export const dictionarySlice = createSlice({
         const initialCardProps = {
           definitionId,
           interval: 0,
-          repetition: 0,
+          n: 0,
           efactor: 2.5,
           dueDate: dayjs(Date.now()).toISOString(),
         };
@@ -64,9 +64,12 @@ export const dictionarySlice = createSlice({
     practice: (state, action: PayloadAction<{id: number; grade: SuperMemoGrade}>) => {
       const {id, grade} = action.payload;
       const flashcard = state.flashcards[id];
-      const {interval, repetition, efactor} = supermemo(flashcard, grade);
-      const dueDate = dayjs(Date.now()).add(interval, 'day').toISOString();
-      state.flashcards[id] = {...flashcard, interval, repetition, efactor, dueDate};
+      const {interval, n, efactor} = srsFunc(flashcard, {score: grade, lateness: 0});
+      // const {interval, repetition, efactor} = supermemo(flashcard, grade);
+      const dueDate = dayjs(Date.now())
+        .add(interval * 60 * 24, 'minute')
+        .toISOString();
+      state.flashcards[id] = {...flashcard, interval, n, efactor, dueDate};
     },
   },
 });

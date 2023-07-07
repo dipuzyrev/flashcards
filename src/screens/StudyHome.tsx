@@ -9,7 +9,8 @@ const StudyHome = ({ navigation }) => {
   const totalFlashcards = Object.values(useAppSelector(selectFlashcards));
   // const words = useSelector(selectWords);
 
-  console.log('totalFlashcards', totalFlashcards);
+  // console.log('totalFlashcards', totalFlashcards);
+  console.log('flashcards to review', flashcards);
 
   const onRevieClick = () => {
     navigation.navigate('StudyCard');
