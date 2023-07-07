@@ -4,25 +4,12 @@ import { Button, Text, View, StyleSheet, ActivityIndicator, SafeAreaView, Pressa
 import { addDefinitions } from "~/store/reducers/dictionarySlice";
 import { useAppDispatch } from "~/store/types";
 import { Configuration, OpenAIApi } from "openai";
+import { callApi } from '~/api/open-ai';
+import { buildExplanationPrompt } from '~/utils/prompt';
 
 const TranslateResult = ({ navigation, route }) => {
   const { text, contextPhrase } = route.params;
   const dispatch = useAppDispatch();
-
-  // const dummyData = [
-  //   {
-  //     definition: "Related to or coming from a god; holy",
-  //     example: "The divine light shone from the artifact.",
-  //     synonyms: ["Sacred", "godly", "heavenly"],
-  //     wordType: "adjective",
-  //   },
-  //   {
-  //     definition: "Exceptionally good or beautiful; perfect.",
-  //     example: "Leeloo was seen as divine by Korben Dallas.",
-  //     synonyms: ["Wonderful", "marvelous", "magnificent"],
-  //     wordType: "adjective",
-  //   },
-  // ]
 
   const [data, setData] = React.useState([]);
 
@@ -44,42 +31,13 @@ const TranslateResult = ({ navigation, route }) => {
     setData(definitions);
   }
 
-  const callApi = () => {
-    const configuration = new Configuration({
-      apiKey: Config.OPENAI_API_KEY,
-    });
-    const openai = new OpenAIApi(configuration);
-
-    let prompt = `
-      You are the English language assistant. 
-      For a given word provide it's common and widely used meanings, example of usage, synonyms (up to 3) and part of speech.
-      Use Oxford dictionary as a source of information. 
-      Use basic vocabulary in meanings and examples. 
-      Keep meaning as short as possible, aim to about 6-8 words. 
-      Avoid using words from user's prompt in meaning.
-      Avoid using punctuation marks and capital letters in meaning. 
-      Response format: \n
-      Each meaning: [T]{<type>}[D]{<meaning>}[E]{<example>}[S]{<synonym1>|<synonym2>|<synonym3>}.
-      If needed, list less synonyms or return "" instead of <synonym> if there is no synonyms found.
-      Separate meanings from each other with 3 asterics (***). \n
-
-      Word: ${text}`;
-    prompt += contextPhrase ? `; only meaning in the context of: ${contextPhrase}` : '';
-
-    openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0,
-    }).then((response) => {
-      console.log(response.data.choices[0].message.content);
-      handleResponse(response.data.choices[0].message.content);
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
-
+  const [error, setError] = React.useState(null);
   React.useEffect(() => {
-    callApi();
+    callApi(buildExplanationPrompt(text, contextPhrase))
+      .then(handleResponse)
+      .catch((error) => {
+        setError(error.message);
+      });
   }, []);
 
   const [selectedDefinitions, setSelectedDefinitions] = React.useState([]);
@@ -98,9 +56,16 @@ const TranslateResult = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {!data.length ? <View style={styles.loaderContainer}>
-        <ActivityIndicator />
-      </View> :
+      {!data.length ?
+        error ?
+          <View style={styles.loaderContainer}>
+            <Text>{error}</Text>
+          </View>
+          :
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator />
+          </View>
+        :
         <View style={styles.wrapper}>
           <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.topContent}>
