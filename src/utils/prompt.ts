@@ -1,18 +1,25 @@
-export const buildExplanationPrompt = (word: string, contextPhrase?: string) => {
-  let prompt = `
-      You are the English language assistant. 
-      For a given word provide it's common and widely used meanings, example of usage, synonyms (up to 3) and part of speech.
-      Use Oxford dictionary as a source of information. 
-      Use basic vocabulary in meanings and examples. 
-      Keep meaning as short as possible, aim to about 6-8 words. 
-      Avoid using words from user's prompt in meaning.
-      Avoid using punctuation marks and capital letters in meaning. 
-      Response format: \n
-      Each meaning: [T]{<type>}[D]{<meaning>}[E]{<example>}[S]{<synonym1>|<synonym2>|<synonym3>}.
-      If needed, list less synonyms or return "" instead of <synonym> if there is no synonyms found.
-      Separate meanings from each other with 3 asterics (***). \n
+import { Message } from "~/types/open-ai";
 
-      Word: ${word}`;
-  prompt += contextPhrase ? `; only meaning in the context of: ${contextPhrase}` : "";
-  return prompt;
+export const buildExplanationPrompt = (word: string, contextPhrase?: string): Message[] => {
+  let userPrompt = `Create flashcards for word "${word}" with its most popular definitions.`;
+  userPrompt += contextPhrase
+    ? ` Don't include flashcards which doesn't correspond to following context: ${contextPhrase}`
+    : "";
+
+  return [
+    {
+      role: "system",
+      content: `
+      Each flashcard should have: \n
+      - precise definition \n
+      - example of usage \n
+      - type: part of speech, idiom, etc \n
+      - few synonyms, if they exist. \n
+      Each flashcard output format: \n
+      [T]{<type>}[D]{<definition>}[E]{<example>}[S]{<synonym1>|<synonym2>|<synonym3>} \n
+      Separate flashcards from each other with 3 asterics (***).
+    `,
+    },
+    { role: "user", content: userPrompt },
+  ];
 };
