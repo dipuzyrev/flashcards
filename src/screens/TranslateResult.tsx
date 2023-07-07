@@ -2,35 +2,45 @@ import * as React from 'react';
 import Config from "react-native-config";
 import { Button, Text, View, StyleSheet, ActivityIndicator, SafeAreaView, Pressable, ScrollView } from 'react-native';
 import { addDefinitions } from "~/store/reducers/dictionarySlice";
-import { useAppDispatch } from "~/store/types";
+import { useAppDispatch } from "~/types/store";
 import { Configuration, OpenAIApi } from "openai";
 import { callApi } from '~/api/open-ai';
 import { buildExplanationPrompt } from '~/utils/prompt';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { TranslateStackParamList } from '~/navigation/NavigationTypes';
+import { TranslateStackParamList } from '~/types/navigation';
+import { Definition } from '~/types/dictionary';
+
 
 type Props = NativeStackScreenProps<TranslateStackParamList, 'TranslateResult'>;
 const TranslateResult = ({ navigation, route }: Props) => {
   const { text, contextPhrase } = route.params;
   const dispatch = useAppDispatch();
 
-  const [data, setData] = React.useState([]);
+  const [data, setData] = React.useState<Definition[]>([]);
 
-  const handleResponse = (response) => {
+  const handleResponse = (response?: string) => {
+    const selectText = (text: string, flag: 'T' | 'D' | 'E' | 'S') => {
+      const regex = new RegExp(`\\[${flag}\\]\\{(.*?)\\}`);
+      const match = text.match(regex);
+      return match ? match[1] : '';
+    }
+
+    if (!response) {
+      return;
+    }
+
     const definitions = response.split('***').map(item => {
       const rawText = item.trim();
       if (!rawText) return null;
-      const wordType = rawText.match(/\[T\]\{(.*?)\}/)[1];
-      const definition = rawText.match(/\[D\]\{(.*?)\}/)[1];
-      const example = rawText.match(/\[E\]\{(.*?)\}/)[1];
-      const synonyms = rawText.match(/\[S\]\{(.*?)\}/)[1];
+      const synonyms = selectText(rawText, 'S')
       return {
-        wordType,
-        definition,
-        example,
+        word: text,
+        wordType: selectText(rawText, 'T'),
+        definition: selectText(rawText, 'D'),
+        example: selectText(rawText, 'E'),
         synonyms: synonyms.trim() && synonyms.trim() != '""' ? synonyms.trim().split('|') : ['-'],
-      }
-    }).filter(item => item);
+      } as Definition;
+    }).filter(item => item) as Definition[];
     setData(definitions);
   }
 
@@ -43,8 +53,8 @@ const TranslateResult = ({ navigation, route }: Props) => {
       });
   }, []);
 
-  const [selectedDefinitions, setSelectedDefinitions] = React.useState([]);
-  const onDefinitionPress = (index) => {
+  const [selectedDefinitions, setSelectedDefinitions] = React.useState<number[]>([]);
+  const onDefinitionPress = (index: number) => {
     if (selectedDefinitions.includes(index)) {
       setSelectedDefinitions(s => s.filter(i => i !== index))
     } else {

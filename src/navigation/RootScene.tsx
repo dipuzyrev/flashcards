@@ -7,7 +7,7 @@ import TranslateResult from '~/screens/TranslateResult';
 import StudyHome from '~/screens/StudyHome';
 import StudyCard from '~/screens/StudyCard/StudyCard';
 import { SFSymbol } from "react-native-sfsymbols";
-import { TranslateStackParamList, StudyStackParamList, TabParamList } from './NavigationTypes';
+import { TranslateStackParamList, StudyStackParamList, TabParamList } from '~/types/navigation';
 // import { wordsToReviewCount } from '~/store/reducers/dictionarySlice';
 
 

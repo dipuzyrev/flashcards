@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { useAppDispatch, useAppSelector } from '~/store/types';
+import { useAppDispatch, useAppSelector } from '~/types/store';
 import { practice, selectFlashcardsToReview } from '~/store/reducers/dictionarySlice';
 import FlashcardComponent from '~/components/Flashcard';
 import { shuffleArray } from '~/utils/shuffle';
 import { SuperMemoGrade } from 'supermemo';
 import ReviewButton from './ReviewButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StudyStackParamList } from '~/navigation/NavigationTypes';
+import { StudyStackParamList } from '~/types/navigation';
+
 
 type Props = NativeStackScreenProps<StudyStackParamList, 'StudyCard'>;
 const StudyCard = ({ navigation }: Props) => {

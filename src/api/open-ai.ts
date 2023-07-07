@@ -13,5 +13,5 @@ export const callApi = async (prompt: string) => {
     temperature: 0,
   });
 
-  return response.data.choices[0].message.content;
+  return response.data.choices[0]?.message?.content;
 };

@@ -1,16 +1,14 @@
 import * as React from 'react';
 import { Button, Text, View, StyleSheet, Pressable } from 'react-native';
-import { useAppSelector } from '~/store/types';
+import { useAppSelector } from '~/types/store';
 import { selectDefinitions } from '~/store/reducers/dictionarySlice';
-import { Flashcard } from '~/store/types';
+import { Flashcard } from '~/types/dictionary';
 
-// type Props = React.PropsWithChildren<{ flashcard: Flashcard }>;
-const FlashcardComponent = ({ flashcard, onFlip }) => {
+
+type Props = { flashcard: Flashcard, onFlip: () => void };
+const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
   const definitions = useAppSelector(selectDefinitions);
   const definition = definitions[flashcard.definitionId];
-
-  // const [front, setFront] = React.useState(flashcard.direction === 'toDefinition' ? definition.word : definition.definition);
-  // const [back, setBack] = React.useState(flashcard.direction === 'toDefinition' ? definition.definition : definition.word);
 
   const front = flashcard.direction === 'toDefinition' ? definition.word : definition.definition;
   const back = flashcard.direction === 'toDefinition' ? definition.definition : definition.word;

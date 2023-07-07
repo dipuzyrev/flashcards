@@ -1,6 +1,6 @@
 import dayjs, {duration} from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import {Flashcard} from '~/store/types';
+import {Flashcard} from '~/types/dictionary';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);

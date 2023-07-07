@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Button, Text, View, StyleSheet, SafeAreaView, TextInput, Pressable } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { TranslateStackParamList } from '~/navigation/NavigationTypes';
+import { TranslateStackParamList } from '~/types/navigation';
+
 
 type Props = NativeStackScreenProps<TranslateStackParamList, 'TranslateForm'>;
 const TranslateForm = ({ navigation }: Props) => {

@@ -1,6 +1,8 @@
 // Source: https://freshcardsapp.com/srs/simulator/
 // But with some modifications
 
+import {SuperMemoEvaluation, SuperMemoItem} from '~/types/dictionary';
+
 /**
  * An approximation of the Anki algorithm:
  *
@@ -30,16 +32,16 @@
  *   reviewed together as a group
  */
 
-export function srsFunc(previous, evaluation) {
+export const srsFunc = (previous: SuperMemoItem, evaluation: SuperMemoEvaluation) => {
   var n, efactor, interval;
 
-  const daysFromMinutes = min => {
+  const daysFromMinutes = (min: number) => {
     return min / (24.0 * 60.0);
   };
 
-  if (previous == null) {
-    previous = {n: 0, efactor: 2.5, interval: 1.0};
-  }
+  // if (previous == null) {
+  //   previous = {n: 0, efactor: 2.5, interval: 1.0};
+  // }
 
   if (previous.n <= 2) {
     // Still in learning phase, so do not change efactor
@@ -75,7 +77,7 @@ export function srsFunc(previous, evaluation) {
           }
           break;
 
-        case 5: // easy
+        default: // easy
           interval = 4.0; // 4 days
           break;
       }
@@ -124,7 +126,7 @@ export function srsFunc(previous, evaluation) {
       interval = Math.ceil((previous.interval + latenessBonus) * workingEfactor);
 
       // Compute amount of fuzz to apply to an interval to avoid bunching up reviews on the same cards.
-      const fuzzForInterval = i => {
+      const fuzzForInterval = (i: number) => {
         var fuzzRange;
         if (i < 2) {
           fuzzRange = 0;
@@ -147,4 +149,4 @@ export function srsFunc(previous, evaluation) {
   }
 
   return {n, efactor, interval};
-}
+};

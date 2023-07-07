@@ -1,7 +1,7 @@
 import React from "react";
 import { Pressable, StyleSheet, Text } from "react-native";
 import { SuperMemoGrade } from "supermemo";
-import { Flashcard } from "~/store/types";
+import { Flashcard } from "~/types/dictionary";
 import { humanizeDuration } from "~/utils/dates";
 import { srsFunc } from "~/utils/spaced-repetition/anki-like-algorithm";
 import { getLateness } from "~/utils/spaced-repetition/lateness";
@@ -12,7 +12,7 @@ type ReviewButtonProps = {
   flashcard: Flashcard;
 }
 const ReviewButton = ({ onPress, level, flashcard }: ReviewButtonProps) => {
-  let grade, btnText, bgColor, textColor;
+  let grade: SuperMemoGrade, btnText, bgColor: string, textColor: string;
 
   switch (level) {
     case 'again':

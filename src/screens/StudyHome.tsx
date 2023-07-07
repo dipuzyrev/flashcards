@@ -1,19 +1,19 @@
 import * as React from 'react';
 import { Button, Text, View, StyleSheet, SafeAreaView, Pressable } from 'react-native';
-import { useAppDispatch, useAppSelector } from "~/store/types";
+import { useAppDispatch, useAppSelector } from "~/types/store";
 import { selectFlashcards, selectFlashcardsToReview } from '~/store/reducers/dictionarySlice';
 import { useSelector } from 'react-redux';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StudyStackParamList } from '~/navigation/NavigationTypes';
+import { StudyStackParamList } from '~/types/navigation';
+
 
 type Props = NativeStackScreenProps<StudyStackParamList, 'StudyHome'>;
 const StudyHome = ({ navigation }: Props) => {
   const flashcards = useAppSelector(selectFlashcardsToReview);
   const totalFlashcards = Object.values(useAppSelector(selectFlashcards));
   // const words = useSelector(selectWords);
-
   // console.log('totalFlashcards', totalFlashcards);
-  console.log('flashcards to review', flashcards);
+  // console.log('flashcards to review', flashcards);
 
   const onRevieClick = () => {
     navigation.navigate('StudyCard');
@@ -40,13 +40,6 @@ const StudyHome = ({ navigation }: Props) => {
         </Pressable>
       </View>
     </SafeAreaView>
-    // <View style={styles.container}>
-    //   <Text>Translation:</Text>
-    //   <Button
-    //     title="Study"
-    //     onPress={() => navigation.navigate('StudyCard')}
-    //   />
-    // </View>
   );
 };
 

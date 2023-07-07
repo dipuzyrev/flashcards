@@ -1,4 +1,4 @@
-export const buildExplanationPrompt = (word, contextPhrase) => {
+export const buildExplanationPrompt = (word: string, contextPhrase?: string) => {
   let prompt = `
       You are the English language assistant. 
       For a given word provide it's common and widely used meanings, example of usage, synonyms (up to 3) and part of speech.

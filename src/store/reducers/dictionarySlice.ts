@@ -1,9 +1,11 @@
 import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState, store} from '~/store/store';
 import dayjs from 'dayjs';
-import {Definition, Flashcard, SuperMemoGrade} from '~/store/types';
 import {srsFunc} from '~/utils/spaced-repetition/anki-like-algorithm';
 import {getLateness} from '~/utils/spaced-repetition/lateness';
+import {SuperMemoGrade} from 'supermemo';
+import {Definition, Flashcard} from '~/types/dictionary';
+import {WritableDraft} from 'immer/dist/internal';
 
 interface FlashcardsState {
   definitions: Record<number, Definition>;
@@ -15,7 +17,7 @@ const initialState: FlashcardsState = {
   flashcards: {},
 };
 
-const uuid = collection => {
+const uuid = (collection: Record<number, any>) => {
   let randomId;
   do {
     randomId = Math.floor(Math.random() * 1000000);
@@ -24,7 +26,7 @@ const uuid = collection => {
 };
 
 export const dictionarySlice = createSlice({
-  name: 'flashcards',
+  name: 'dictionary',
   initialState,
   reducers: {
     addDefinitions: (state, action: PayloadAction<Definition[]>) => {
