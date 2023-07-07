@@ -2,7 +2,8 @@ import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState, store} from '~/store/store';
 import dayjs from 'dayjs';
 import {Definition, Flashcard, SuperMemoGrade} from '~/store/types';
-import {srsFunc} from '~/utils/srs/anki-like';
+import {srsFunc} from '~/utils/spaced-repetition/anki-like-algorithm';
+import {getLateness} from '~/utils/spaced-repetition/lateness';
 
 interface FlashcardsState {
   definitions: Record<number, Definition>;
@@ -64,7 +65,10 @@ export const dictionarySlice = createSlice({
     practice: (state, action: PayloadAction<{id: number; grade: SuperMemoGrade}>) => {
       const {id, grade} = action.payload;
       const flashcard = state.flashcards[id];
-      const {interval, n, efactor} = srsFunc(flashcard, {score: grade, lateness: 0});
+      const {interval, n, efactor} = srsFunc(flashcard, {
+        score: grade,
+        lateness: getLateness(flashcard),
+      });
       // const {interval, repetition, efactor} = supermemo(flashcard, grade);
       const dueDate = dayjs(Date.now())
         .add(interval * 60 * 24, 'minute')
