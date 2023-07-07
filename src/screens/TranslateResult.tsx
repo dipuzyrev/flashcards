@@ -52,7 +52,7 @@ const TranslateResult = ({ navigation, route }) => {
 
     let prompt = `
       You are the English language assistant. 
-      For a given word provide it's common and widely used meanings, example of usage, synonyms and part of speech.
+      For a given word provide it's common and widely used meanings, example of usage, synonyms (up to 3) and part of speech.
       Use Oxford dictionary as a source of information. 
       Use basic vocabulary in meanings and examples. 
       Keep meaning as short as possible, aim to about 6-8 words. 
