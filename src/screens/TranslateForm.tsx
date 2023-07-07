@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { Button, Text, View, StyleSheet, SafeAreaView, TextInput, Pressable } from 'react-native';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { TranslateStackParamList } from '~/navigation/NavigationTypes';
 
-const TranslateForm = ({ navigation }) => {
+type Props = NativeStackScreenProps<TranslateStackParamList, 'TranslateForm'>;
+const TranslateForm = ({ navigation }: Props) => {
   const [text, onChangeText] = React.useState('');
   const [contextPhrase, onChangeContextPhrase] = React.useState('');
 

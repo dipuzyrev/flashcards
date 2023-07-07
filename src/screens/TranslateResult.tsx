@@ -6,8 +6,11 @@ import { useAppDispatch } from "~/store/types";
 import { Configuration, OpenAIApi } from "openai";
 import { callApi } from '~/api/open-ai';
 import { buildExplanationPrompt } from '~/utils/prompt';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { TranslateStackParamList } from '~/navigation/NavigationTypes';
 
-const TranslateResult = ({ navigation, route }) => {
+type Props = NativeStackScreenProps<TranslateStackParamList, 'TranslateResult'>;
+const TranslateResult = ({ navigation, route }: Props) => {
   const { text, contextPhrase } = route.params;
   const dispatch = useAppDispatch();
 

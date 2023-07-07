@@ -6,8 +6,11 @@ import FlashcardComponent from '~/components/Flashcard';
 import { shuffleArray } from '~/utils/shuffle';
 import { SuperMemoGrade } from 'supermemo';
 import ReviewButton from './ReviewButton';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { StudyStackParamList } from '~/navigation/NavigationTypes';
 
-const StudyCard = ({ navigation }) => {
+type Props = NativeStackScreenProps<StudyStackParamList, 'StudyCard'>;
+const StudyCard = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
 
   const cardsToReviewState = useAppSelector(selectFlashcardsToReview);

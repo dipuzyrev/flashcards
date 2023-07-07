@@ -3,8 +3,11 @@ import { Button, Text, View, StyleSheet, SafeAreaView, Pressable } from 'react-n
 import { useAppDispatch, useAppSelector } from "~/store/types";
 import { selectFlashcards, selectFlashcardsToReview } from '~/store/reducers/dictionarySlice';
 import { useSelector } from 'react-redux';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { StudyStackParamList } from '~/navigation/NavigationTypes';
 
-const StudyHome = ({ navigation }) => {
+type Props = NativeStackScreenProps<StudyStackParamList, 'StudyHome'>;
+const StudyHome = ({ navigation }: Props) => {
   const flashcards = useAppSelector(selectFlashcardsToReview);
   const totalFlashcards = Object.values(useAppSelector(selectFlashcards));
   // const words = useSelector(selectWords);

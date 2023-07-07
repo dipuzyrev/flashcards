@@ -6,11 +6,6 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
-    },
-
-    // TODO: remove
-    "noEmitOnError": false,
-    "noImplicitAny": false,
-    "strict": false
+    }
   }
 }
