@@ -56,7 +56,7 @@ const TranslateResult = ({ navigation, route }) => {
       Use Oxford dictionary as a source of information. 
       Use basic vocabulary in meanings and examples. 
       Keep meaning as short as possible, aim to about 6-8 words. 
-      Avoid using word in meaning.
+      Avoid using words from user's prompt in meaning.
       Avoid using punctuation marks and capital letters in meaning. 
       Response format: \n
       Each meaning: [T]{<type>}[D]{<meaning>}[E]{<example>}[S]{<synonym1>|<synonym2>|<synonym3>}.
