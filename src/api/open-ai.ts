@@ -1,5 +1,5 @@
-import {Configuration, OpenAIApi} from 'openai';
-import Config from 'react-native-config';
+import { Configuration, OpenAIApi } from "openai";
+import Config from "react-native-config";
 
 export const callApi = async (prompt: string) => {
   const configuration = new Configuration({
@@ -8,8 +8,8 @@ export const callApi = async (prompt: string) => {
   const openai = new OpenAIApi(configuration);
 
   const response = await openai.createChatCompletion({
-    model: 'gpt-3.5-turbo',
-    messages: [{role: 'user', content: prompt}],
+    model: "gpt-3.5-turbo",
+    messages: [{ role: "user", content: prompt }],
     temperature: 0,
   });
 

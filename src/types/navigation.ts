@@ -1,8 +1,8 @@
-import {NavigatorScreenParams} from '@react-navigation/native';
+import { NavigatorScreenParams } from "@react-navigation/native";
 
 export type TranslateStackParamList = {
   TranslateForm: undefined;
-  TranslateResult: {text: string; contextPhrase: string | undefined};
+  TranslateResult: { text: string; contextPhrase: string | undefined };
 };
 
 export type StudyStackParamList = {

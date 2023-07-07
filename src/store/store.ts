@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {configureStore} from '@reduxjs/toolkit';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { configureStore } from "@reduxjs/toolkit";
 import {
   FLUSH,
   PAUSE,
@@ -9,12 +9,12 @@ import {
   PURGE,
   REGISTER,
   REHYDRATE,
-} from 'redux-persist';
-import dictionaryReducer from './reducers/dictionarySlice';
+} from "redux-persist";
+import dictionaryReducer from "./reducers/dictionarySlice";
 
 const persistedDictionaryReducer = persistReducer(
-  {key: 'dictionary', storage: AsyncStorage},
-  dictionaryReducer,
+  { key: "dictionary", storage: AsyncStorage },
+  dictionaryReducer
 );
 
 export const store = configureStore({
@@ -22,7 +22,7 @@ export const store = configureStore({
     dictionary: persistedDictionaryReducer,
     // app: appReducer,
   },
-  middleware: getDefaultMiddleware =>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],

@@ -1,24 +1,23 @@
-import * as React from 'react';
-import { Button, Text, View, StyleSheet, SafeAreaView, TextInput, Pressable } from 'react-native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { TranslateStackParamList } from '~/types/navigation';
+import * as React from "react";
+import { Button, Text, View, StyleSheet, SafeAreaView, TextInput, Pressable } from "react-native";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { TranslateStackParamList } from "~/types/navigation";
 
-
-type Props = NativeStackScreenProps<TranslateStackParamList, 'TranslateForm'>;
+type Props = NativeStackScreenProps<TranslateStackParamList, "TranslateForm">;
 const TranslateForm = ({ navigation }: Props) => {
-  const [text, onChangeText] = React.useState('');
-  const [contextPhrase, onChangeContextPhrase] = React.useState('');
+  const [text, onChangeText] = React.useState("");
+  const [contextPhrase, onChangeContextPhrase] = React.useState("");
 
   const onTranslateClick = () => {
     if (!text) {
       return;
     }
-    onChangeText('')
-    onChangeContextPhrase('')
-    navigation.navigate('TranslateResult', {
+    onChangeText("");
+    onChangeContextPhrase("");
+    navigation.navigate("TranslateResult", {
       text,
-      contextPhrase
-    })
+      contextPhrase,
+    });
   };
 
   return (
@@ -44,12 +43,12 @@ const TranslateForm = ({ navigation }: Props) => {
             placeholder="Optional context — sentence or phrase"
           />
         </View>
-        <Pressable onPress={onTranslateClick} style={({ pressed }) => {
-          return [
-            styles.mainActionBtn,
-            { opacity: pressed ? 0.5 : 1 }
-          ]
-        }}>
+        <Pressable
+          onPress={onTranslateClick}
+          style={({ pressed }) => {
+            return [styles.mainActionBtn, { opacity: pressed ? 0.5 : 1 }];
+          }}
+        >
           <Text style={styles.mainActionBtnText}>Explain</Text>
         </Pressable>
       </View>
@@ -63,21 +62,21 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    flexDirection: "column",
+    justifyContent: "space-between",
     padding: 16,
   },
   mainActionBtn: {
     padding: 32,
     paddingVertical: 16,
-    backgroundColor: '#000',
-    borderRadius: 8
+    backgroundColor: "#000",
+    borderRadius: 8,
   },
   mainActionBtnText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontWeight: '500',
-    fontSize: 16
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "500",
+    fontSize: 16,
   },
   input: {
     fontSize: 16,
@@ -85,7 +84,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 12,
     paddingVertical: 16,
-    borderRadius: 8
+    borderRadius: 8,
   },
   // bigInput: {
   //   fontSize: 16,

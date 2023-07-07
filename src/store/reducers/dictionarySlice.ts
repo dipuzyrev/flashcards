@@ -1,11 +1,11 @@
-import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {RootState, store} from '~/store/store';
-import dayjs from 'dayjs';
-import {srsFunc} from '~/utils/spaced-repetition/anki-like-algorithm';
-import {getLateness} from '~/utils/spaced-repetition/lateness';
-import {SuperMemoGrade} from 'supermemo';
-import {Definition, Flashcard} from '~/types/dictionary';
-import {WritableDraft} from 'immer/dist/internal';
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState, store } from "~/store/store";
+import dayjs from "dayjs";
+import { srsFunc } from "~/utils/spaced-repetition/anki-like-algorithm";
+import { getLateness } from "~/utils/spaced-repetition/lateness";
+import { SuperMemoGrade } from "supermemo";
+import { Definition, Flashcard } from "~/types/dictionary";
+import { WritableDraft } from "immer/dist/internal";
 
 interface FlashcardsState {
   definitions: Record<number, Definition>;
@@ -26,15 +26,15 @@ const uuid = (collection: Record<number, any>) => {
 };
 
 export const dictionarySlice = createSlice({
-  name: 'dictionary',
+  name: "dictionary",
   initialState,
   reducers: {
     addDefinitions: (state, action: PayloadAction<Definition[]>) => {
       const definitions = action.payload;
-      definitions.forEach(definition => {
+      definitions.forEach((definition) => {
         if (
           Object.values(state.definitions).find(
-            d => d.word === definition.word && d.definition === definition.definition,
+            (d) => d.word === definition.word && d.definition === definition.definition
           )
         ) {
           return;
@@ -54,40 +54,40 @@ export const dictionarySlice = createSlice({
         };
         const toDefinitionFlashcardId = uuid(state.flashcards);
         state.flashcards[toDefinitionFlashcardId] = {
-          direction: 'toDefinition',
+          direction: "toDefinition",
           ...initialCardProps,
         };
         const fromDefinitionFlashcardId = uuid(state.flashcards);
         state.flashcards[fromDefinitionFlashcardId] = {
-          direction: 'fromDefinition',
+          direction: "fromDefinition",
           ...initialCardProps,
         };
       });
     },
-    practice: (state, action: PayloadAction<{id: number; grade: SuperMemoGrade}>) => {
-      const {id, grade} = action.payload;
+    practice: (state, action: PayloadAction<{ id: number; grade: SuperMemoGrade }>) => {
+      const { id, grade } = action.payload;
       const flashcard = state.flashcards[id];
-      const {interval, n, efactor} = srsFunc(flashcard, {
+      const { interval, n, efactor } = srsFunc(flashcard, {
         score: grade,
         lateness: getLateness(flashcard),
       });
       // const {interval, repetition, efactor} = supermemo(flashcard, grade);
       const dueDate = dayjs(Date.now())
-        .add(interval * 60 * 24, 'minute')
+        .add(interval * 60 * 24, "minute")
         .toISOString();
-      state.flashcards[id] = {...flashcard, interval, n, efactor, dueDate};
+      state.flashcards[id] = { ...flashcard, interval, n, efactor, dueDate };
     },
   },
 });
 
-export const {addDefinitions, practice} = dictionarySlice.actions;
+export const { addDefinitions, practice } = dictionarySlice.actions;
 export const selectDictionary = (state: RootState) => state.dictionary;
 // export const selectWords = (state: RootState) => state.dictionary.words;
 
 export const selectFlashcards = (state: RootState) => state.dictionary.flashcards;
 export const selectDefinitions = (state: RootState) => state.dictionary.definitions;
 
-export const selectFlashcardsToReview = createSelector([selectFlashcards], flashcards => {
+export const selectFlashcardsToReview = createSelector([selectFlashcards], (flashcards) => {
   const flashcardsToReview = Object.entries(flashcards).filter(([_, f]) => {
     const dueDate = dayjs(f.dueDate);
     return dueDate.isBefore(dayjs(Date.now()));

@@ -8,37 +8,37 @@ import { getLateness } from "~/utils/spaced-repetition/lateness";
 
 type ReviewButtonProps = {
   onPress: (grade: SuperMemoGrade) => void;
-  level: 'again' | 'hard' | 'good' | 'easy';
+  level: "again" | "hard" | "good" | "easy";
   flashcard: Flashcard;
-}
+};
 const ReviewButton = ({ onPress, level, flashcard }: ReviewButtonProps) => {
   let grade: SuperMemoGrade, btnText, bgColor: string, textColor: string;
 
   switch (level) {
-    case 'again':
+    case "again":
       grade = 2;
-      btnText = 'Again';
-      bgColor = '#FDF1F3';
-      textColor = '#EB4B51';
+      btnText = "Again";
+      bgColor = "#FDF1F3";
+      textColor = "#EB4B51";
       break;
-    case 'hard':
+    case "hard":
       grade = 3;
-      btnText = 'Hard';
-      bgColor = '#FEF9E8';
-      textColor = '#F09135';
+      btnText = "Hard";
+      bgColor = "#FEF9E8";
+      textColor = "#F09135";
       break;
-    case 'good':
+    case "good":
       grade = 4;
-      btnText = 'Good';
-      bgColor = '#F8FFED';
-      textColor = '#6DC43A';
+      btnText = "Good";
+      bgColor = "#F8FFED";
+      textColor = "#6DC43A";
       break;
 
     default:
       grade = 5;
-      btnText = 'Easy';
-      bgColor = '#F0F8FE';
-      textColor = '#4090E9';
+      btnText = "Easy";
+      bgColor = "#F0F8FE";
+      textColor = "#4090E9";
       break;
   }
 
@@ -55,14 +55,16 @@ const ReviewButton = ({ onPress, level, flashcard }: ReviewButtonProps) => {
         return [
           styles.reviewBtn,
           { backgroundColor: bgColor, borderColor: textColor },
-          { opacity: pressed ? 0.5 : 1 }
-        ]
+          { opacity: pressed ? 0.5 : 1 },
+        ];
       }}
     >
       <Text style={[styles.reviewBtnText, { color: textColor }]}>{btnText}</Text>
-      <Text style={[styles.reviewBtnText, { color: textColor }]}>{humanizeDuration(intervalEvaluation)}</Text>
+      <Text style={[styles.reviewBtnText, { color: textColor }]}>
+        {humanizeDuration(intervalEvaluation)}
+      </Text>
     </Pressable>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
@@ -70,13 +72,13 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 8,
     borderWidth: 1,
-    display: 'flex',
-    justifyContent: 'center',
+    display: "flex",
+    justifyContent: "center",
   },
   reviewBtnText: {
-    textAlign: 'center',
-    fontWeight: '500',
-    fontSize: 16
+    textAlign: "center",
+    fontWeight: "500",
+    fontSize: 16,
   },
 });
 

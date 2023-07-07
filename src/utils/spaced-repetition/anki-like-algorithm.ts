@@ -1,7 +1,7 @@
 // Source: https://freshcardsapp.com/srs/simulator/
 // But with some modifications
 
-import {SuperMemoEvaluation, SuperMemoItem} from '~/types/dictionary';
+import { SuperMemoEvaluation, SuperMemoItem } from "~/types/dictionary";
 
 /**
  * An approximation of the Anki algorithm:
@@ -106,7 +106,7 @@ export const srsFunc = (previous: SuperMemoItem, evaluation: SuperMemoEvaluation
       }
       efactor = Math.max(
         1.3,
-        previous.efactor + (0.1 - (5 - evaluation.score) * (0.08 + (5 - evaluation.score) * 0.02)),
+        previous.efactor + (0.1 - (5 - evaluation.score) * (0.08 + (5 - evaluation.score) * 0.02))
       );
 
       n = previous.n + 1;
@@ -148,5 +148,5 @@ export const srsFunc = (previous: SuperMemoItem, evaluation: SuperMemoEvaluation
     }
   }
 
-  return {n, efactor, interval};
+  return { n, efactor, interval };
 };

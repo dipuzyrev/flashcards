@@ -1,13 +1,12 @@
-import * as React from 'react';
-import { Button, Text, View, StyleSheet, SafeAreaView, Pressable } from 'react-native';
+import * as React from "react";
+import { Button, Text, View, StyleSheet, SafeAreaView, Pressable } from "react-native";
 import { useAppDispatch, useAppSelector } from "~/types/store";
-import { selectFlashcards, selectFlashcardsToReview } from '~/store/reducers/dictionarySlice';
-import { useSelector } from 'react-redux';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StudyStackParamList } from '~/types/navigation';
+import { selectFlashcards, selectFlashcardsToReview } from "~/store/reducers/dictionarySlice";
+import { useSelector } from "react-redux";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { StudyStackParamList } from "~/types/navigation";
 
-
-type Props = NativeStackScreenProps<StudyStackParamList, 'StudyHome'>;
+type Props = NativeStackScreenProps<StudyStackParamList, "StudyHome">;
 const StudyHome = ({ navigation }: Props) => {
   const flashcards = useAppSelector(selectFlashcardsToReview);
   const totalFlashcards = Object.values(useAppSelector(selectFlashcards));
@@ -16,7 +15,7 @@ const StudyHome = ({ navigation }: Props) => {
   // console.log('flashcards to review', flashcards);
 
   const onRevieClick = () => {
-    navigation.navigate('StudyCard');
+    navigation.navigate("StudyCard");
   };
 
   return (
@@ -30,12 +29,13 @@ const StudyHome = ({ navigation }: Props) => {
           <Text style={styles.flashcardsCount}>{flashcards.length}</Text>
           <Text style={styles.subtitle}>flashcards to review</Text>
         </View>
-        <Pressable onPress={onRevieClick} disabled={!flashcards.length} style={({ pressed }) => {
-          return [
-            styles.mainActionBtn,
-            { opacity: pressed || !flashcards.length ? 0.5 : 1 }
-          ]
-        }}>
+        <Pressable
+          onPress={onRevieClick}
+          disabled={!flashcards.length}
+          style={({ pressed }) => {
+            return [styles.mainActionBtn, { opacity: pressed || !flashcards.length ? 0.5 : 1 }];
+          }}
+        >
           <Text style={styles.mainActionBtnText}>Review</Text>
         </Pressable>
       </View>
@@ -49,41 +49,41 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    flexDirection: "column",
+    justifyContent: "space-between",
     padding: 16,
   },
 
   mainActionBtn: {
     padding: 32,
     paddingVertical: 16,
-    backgroundColor: '#000',
-    borderRadius: 8
+    backgroundColor: "#000",
+    borderRadius: 8,
   },
   mainActionBtnText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontWeight: '500',
-    fontSize: 16
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "500",
+    fontSize: 16,
   },
   flashcardsCount: {
     fontSize: 48,
-    fontWeight: '500',
-    textAlign: 'center',
+    fontWeight: "500",
+    textAlign: "center",
     marginTop: 48,
   },
   totalFlashcardsCount: {
     fontSize: 24,
-    fontWeight: '500',
-    textAlign: 'center',
+    fontWeight: "500",
+    textAlign: "center",
     marginTop: 48,
   },
   subtitle: {
     fontSize: 16,
-    fontWeight: '500',
-    textAlign: 'center',
+    fontWeight: "500",
+    textAlign: "center",
     marginTop: 8,
-  }
+  },
 });
 
 export default StudyHome;

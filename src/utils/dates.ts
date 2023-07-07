@@ -1,12 +1,12 @@
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
 export const humanizeDuration = (seconds: number) => {
-  const diff = dayjs.duration(Number(seconds), 'second');
+  const diff = dayjs.duration(Number(seconds), "second");
   if (diff.asHours() < 1) {
     return `${Math.floor(diff.asMinutes())}m`;
   } else if (diff.asHours() < 24) {

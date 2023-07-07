@@ -1,8 +1,8 @@
-import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
-import type {AppDispatch, RootState} from '../store/store';
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../store/store";
 
 export interface NetworkData {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 

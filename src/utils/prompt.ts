@@ -13,6 +13,6 @@ export const buildExplanationPrompt = (word: string, contextPhrase?: string) => 
       Separate meanings from each other with 3 asterics (***). \n
 
       Word: ${word}`;
-  prompt += contextPhrase ? `; only meaning in the context of: ${contextPhrase}` : '';
+  prompt += contextPhrase ? `; only meaning in the context of: ${contextPhrase}` : "";
   return prompt;
 };

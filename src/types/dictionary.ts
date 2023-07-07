@@ -6,7 +6,7 @@ export interface Definition {
   synonyms: string[];
 }
 
-type Direction = 'toDefinition' | 'fromDefinition';
+type Direction = "toDefinition" | "fromDefinition";
 
 export interface SuperMemoItem {
   n: number;
