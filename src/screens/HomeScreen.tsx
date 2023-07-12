@@ -1,6 +1,15 @@
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import * as React from "react";
-import { SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import AppButton from "~/components/AppButton";
 import { selectFlashcards, selectFlashcardsToReview } from "~/store/reducers/dictionarySlice";
 import { HomeStackParamList } from "~/types/navigation";
@@ -33,52 +42,57 @@ const HomeScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <View style={[styles.widget, styles.cardsInfoContainer]}>
-          <Text style={styles.totalCards}>{totalFlashcards.length}</Text>
-          <Text style={styles.totalCardsSubtitle}>Flashcards Total</Text>
-          <AppButton disabled={!flashcardsToReview.length} onPress={onReviewClick}>
-            {flashcardsToReview.length
-              ? `Review ${flashcardsToReview.length} Card${
-                  flashcardsToReview.length > 1 ? "s" : ""
-                }`
-              : "Nothing to Review"}
-          </AppButton>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.safeArea}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <View style={[styles.widget, styles.cardsInfoContainer]}>
+            <Text style={styles.totalCards}>{totalFlashcards.length}</Text>
+            <Text style={styles.totalCardsSubtitle}>Flashcards Total</Text>
+            <AppButton disabled={!flashcardsToReview.length} onPress={onReviewClick}>
+              {flashcardsToReview.length
+                ? `Review ${flashcardsToReview.length} Card${
+                    flashcardsToReview.length > 1 ? "s" : ""
+                  }`
+                : "Nothing to Review"}
+            </AppButton>
+          </View>
+          <View style={[styles.widget, styles.formContainer]}>
+            <TextInput
+              style={styles.input}
+              autoCapitalize="none"
+              value={word}
+              onChangeText={setWord}
+              onSubmitEditing={onExplainClick}
+              placeholder="Word or phrase"
+            />
+            {/* <TextInput
+                style={styles.input}
+                autoCapitalize="none"
+                value={context}
+                onChangeText={setContext}
+                onSubmitEditing={onExplainClick}
+                placeholder="Optional context"
+              /> */}
+            {/* <View style={styles.checkboxContainer}>
+                <Text style={styles.checkboxLabel}>Auto flashcard creation</Text>
+                <Switch onValueChange={setAutoCardCreation} value={autoCardCreation} />
+              </View> */}
+            <AppButton
+              variant="solid"
+              role="secondary"
+              width="full"
+              disabled={!word}
+              onPress={onExplainClick}
+            >
+              Explain
+            </AppButton>
+          </View>
         </View>
-        <View style={[styles.widget, styles.formContainer]}>
-          <TextInput
-            style={styles.input}
-            autoCapitalize="none"
-            value={word}
-            onChangeText={setWord}
-            onSubmitEditing={onExplainClick}
-            placeholder="Word or phrase"
-          />
-          {/* <TextInput
-            style={styles.input}
-            autoCapitalize="none"
-            value={context}
-            onChangeText={setContext}
-            onSubmitEditing={onExplainClick}
-            placeholder="Optional context"
-          /> */}
-          {/* <View style={styles.checkboxContainer}>
-            <Text style={styles.checkboxLabel}>Auto flashcard creation</Text>
-            <Switch onValueChange={setAutoCardCreation} value={autoCardCreation} />
-          </View> */}
-          <AppButton
-            variant="solid"
-            role="secondary"
-            width="full"
-            disabled={!word}
-            onPress={onExplainClick}
-          >
-            Explain
-          </AppButton>
-        </View>
-      </View>
-    </SafeAreaView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
