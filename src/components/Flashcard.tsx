@@ -15,6 +15,9 @@ const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
   const reversed = flashcard.direction !== "toDefinition";
 
   const flipCard = () => {
+    if (flipped) {
+      return;
+    }
     setFlipped((flipped) => !flipped);
     onFlip();
   };
