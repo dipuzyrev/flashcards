@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   reviewBtnText: {
     textAlign: "center",
     fontWeight: "500",
-    fontSize: 16,
+    fontSize: 15,
   },
 });
 

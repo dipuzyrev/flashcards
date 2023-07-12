@@ -1,6 +1,6 @@
-import * as React from "react";
-import { Text, View, StyleSheet, SafeAreaView } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import * as React from "react";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { SettingsStackParamList } from "~/types/navigation";
 
 type Props = NativeStackScreenProps<SettingsStackParamList, "SettingsHome">;
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "500",
     textAlign: "center",
     marginTop: 8,

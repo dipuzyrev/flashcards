@@ -118,21 +118,9 @@ const FlashcardListScreen = ({ navigation }: Props) => {
                 {item.direction === "fromDefinition" ? item.word : item.meaning}
               </Text>
               <Text style={styles.stats}>{item.stats}</Text>
-              {/* <Text style={{ paddingVertical: 10, fontSize: 18 }}>{item.meaning}</Text>
-              <Text>
-                <Text style={{ fontWeight: "bold" }}>Example:</Text> {item.example}
-              </Text>
-              <Text>
-                <Text style={{ fontWeight: "bold" }}>Popularity:</Text> {item.popularity}
-              </Text> */}
             </Pressable>
           );
         })}
-        {/* <View>
-          <Text style={styles.totalFlashcardsCount}>{allFlashcards.length}</Text>
-          <Text style={styles.subtitle}>flashcards total</Text>
-        </View> */}
-        {/* </View> */}
       </ScrollView>
     </SafeAreaView>
   );
@@ -172,11 +160,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   meaning: {
-    fontSize: 16,
+    fontSize: 15,
     marginVertical: 8,
   },
   stats: {
-    fontSize: 16,
+    fontSize: 15,
     color: "#777",
   },
 });

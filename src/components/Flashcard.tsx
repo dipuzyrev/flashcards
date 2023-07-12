@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Pressable, StyleSheet, Text } from "react-native";
+import { ImageBackground, Pressable, StyleSheet, Text, View } from "react-native";
 import { selectDefinitions } from "~/store/reducers/dictionarySlice";
 import { IFlashcard } from "~/types/dictionary";
 import { useAppSelector } from "~/types/store";
@@ -9,11 +9,10 @@ const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
   const definitions = useAppSelector(selectDefinitions);
   const definition = definitions[flashcard.definitionId];
 
-  const front = flashcard.direction === "toDefinition" ? definition.word : definition.definition;
-  const back = flashcard.direction === "toDefinition" ? definition.definition : definition.word;
+  const front = flashcard.direction === "toDefinition" ? definition.word : definition.meaning;
+  const back = flashcard.direction === "toDefinition" ? definition.meaning : definition.word;
   const [flipped, setFlipped] = React.useState(false);
-  const reversed =
-    (front === definition.definition && !flipped) || (front === definition.word && flipped);
+  const reversed = flashcard.direction !== "toDefinition";
 
   const flipCard = () => {
     setFlipped((flipped) => !flipped);
@@ -24,50 +23,160 @@ const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
     setFlipped(false);
   }, [flashcard]);
 
+  const bgImage = require("~/img/card-bg.png");
+  const emptyBgImage = require("~/img/card-bg-empty.png");
+
   return (
-    <Pressable
-      style={{ ...styles.container, ...(reversed ? { backgroundColor: "#111" } : {}) }}
-      onPress={flipCard}
-    >
-      <Text style={{ ...styles.wordType, ...(reversed ? { color: "#eee" } : {}) }}>
-        {definition.type}
-      </Text>
-      <Text style={{ ...styles.mainText, ...(reversed ? { color: "#eee" } : {}) }}>
-        {flipped ? back : front}
-      </Text>
-      <Text></Text>
-      {/* <Text style={{ ...styles.hint, ...(flipped ? { color: '#555' } : {}) }}>Tap to flip</Text> */}
-    </Pressable>
+    <ImageBackground source={flipped ? emptyBgImage : bgImage} style={styles.image}>
+      <Pressable style={{ ...styles.container, ...(reversed ? {} : {}) }} onPress={flipCard}>
+        <View style={styles.cardHeader}>
+          <Text style={styles.type}>{definition.type}</Text>
+          <View style={styles.dot}></View>
+        </View>
+
+        <View style={styles.cardBody}>
+          <Text
+            style={[
+              styles.word,
+              {
+                fontWeight: reversed ? "800" : "500",
+                opacity: reversed ? (flipped ? 1 : 0) : 1,
+              },
+            ]}
+          >
+            {definition.word}
+          </Text>
+          <Text style={[styles.transcription, { opacity: reversed ? (flipped ? 1 : 0) : 1 }]}>
+            [{definition.transcription}]
+          </Text>
+          <Text
+            style={[
+              styles.meaning,
+              {
+                fontWeight: reversed ? "500" : "800",
+                opacity: reversed ? 1 : flipped ? 1 : 0,
+              },
+            ]}
+          >
+            {definition.meaning}
+          </Text>
+          <Text style={[styles.example, { opacity: flipped ? 1 : 0 }]}>“{definition.example}”</Text>
+        </View>
+
+        <View style={[styles.cardFooter, { opacity: flipped ? 1 : 0 }]}>
+          <View>
+            <Text style={styles.synonymsTitle}>Synonyms</Text>
+            {definition.synonyms.length ? (
+              definition.synonyms.map((synonym) => (
+                <Text style={styles.synonymItem}>{synonym}</Text>
+              ))
+            ) : (
+              <Text style={styles.synonymItem}>–</Text>
+            )}
+          </View>
+          <View>
+            <Text style={styles.synonymsTitle}>Antonyms</Text>
+            {definition.antonyms.length ? (
+              definition.antonyms.map((synonym) => (
+                <Text style={styles.antonymItem}>{synonym}</Text>
+              ))
+            ) : (
+              <Text style={styles.antonymItem}>–</Text>
+            )}
+          </View>
+        </View>
+      </Pressable>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  image: {
+    width: "100%",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    borderWidth: 1,
+    borderColor: "#D3D3D3",
+    backgroundColor: "#fff",
+  },
   container: {
     width: "100%",
     flex: 1,
     alignItems: "center",
-    justifyContent: "space-between",
-    borderWidth: 1,
-    borderColor: "#222",
-    borderRadius: 8,
-    padding: 16,
+    justifyContent: "center",
+    padding: 24,
   },
-  // flippedCard: {
-  //   backgroundColor: '#111',
-  // },
-  wordType: {
+  cardHeader: {
     width: "100%",
-    textAlign: "left",
-    fontWeight: "500",
-    // color: '#777',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
-  mainText: {
-    fontSize: 26,
-    fontWeight: "500",
-    textAlign: "center",
+  cardFooter: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
-  hint: {
+  cardBody: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  dot: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "#F1F1F1",
+    borderWidth: 1,
+    borderColor: "#D3D3D3",
+  },
+  type: {
     color: "#777",
+    fontSize: 15,
+  },
+  transcription: {
+    fontSize: 15,
+  },
+
+  word: {
+    fontSize: 24,
+    textAlign: "center",
+    marginBottom: 2,
+  },
+  meaning: {
+    fontWeight: "800",
+    fontSize: 24,
+    textAlign: "center",
+    marginVertical: 24,
+  },
+  example: {
+    fontSize: 15,
+  },
+
+  synonymsTitle: {
+    fontSize: 15,
+    color: "#777",
+    textTransform: "uppercase",
+    marginBottom: 4,
+  },
+  synonymItem: {
+    fontSize: 15,
+    marginBottom: 2,
+  },
+  antonymItem: {
+    fontSize: 15,
+    marginBottom: 2,
+    textAlign: "right",
   },
 });
 

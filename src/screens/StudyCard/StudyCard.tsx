@@ -1,20 +1,20 @@
-import * as React from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { useAppDispatch, useAppSelector } from "~/types/store";
-import { practice, selectFlashcardsToReview } from "~/store/reducers/dictionarySlice";
-import FlashcardComponent from "~/components/Flashcard";
-import { shuffleArray } from "~/utils/shuffle";
-import { SuperMemoGrade } from "supermemo";
-import ReviewButton from "./ReviewButton";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { FlashcardsStackParamList } from "~/types/navigation";
+import * as React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { SuperMemoGrade } from "supermemo";
+import FlashcardComponent from "~/components/Flashcard";
+import { practice, selectFlashcardsToReview } from "~/store/reducers/dictionarySlice";
+import { HomeStackParamList } from "~/types/navigation";
+import { useAppDispatch, useAppSelector } from "~/types/store";
+import { shuffleArray } from "~/utils/shuffle";
+import ReviewButton from "./ReviewButton";
 
-type Props = NativeStackScreenProps<FlashcardsStackParamList, "StudyCard">;
+type Props = NativeStackScreenProps<HomeStackParamList, "StudyCard">;
 const StudyCard = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
 
   const cardsToReviewState = useAppSelector(selectFlashcardsToReview);
-  const [carsToReview] = React.useState(shuffleArray(cardsToReviewState));
+  const [carsToReview] = React.useState(shuffleArray(Object.entries(cardsToReviewState)));
 
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const currentCard = carsToReview[currentIndex] ? carsToReview[currentIndex][1] : null;
@@ -29,7 +29,7 @@ const StudyCard = ({ navigation }: Props) => {
   React.useEffect(() => {
     if (currentCard === null) {
       // Navigate to home when there are no more cards to review
-      navigation.navigate("StudyHome");
+      navigation.navigate("HomeScreen");
     }
   }, [currentCard]);
 
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   placeholderText: {
     textAlign: "center",
     color: "#777",
+    fontSize: 15,
   },
 });
 

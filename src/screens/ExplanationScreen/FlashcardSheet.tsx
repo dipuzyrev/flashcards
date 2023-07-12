@@ -27,6 +27,7 @@ const FlashcardSheet = ({
   setContentUpdate,
 }: Props) => {
   const [word, setWord] = React.useState(content?.word);
+  const [type, setType] = React.useState(content?.type);
   const [transcription, setTranscription] = React.useState(content?.transcription);
   const [meaning, setMeaning] = React.useState(content?.meaning);
   const [example, setExample] = React.useState(content?.example);
@@ -35,6 +36,7 @@ const FlashcardSheet = ({
 
   React.useEffect(() => {
     setWord(content?.word);
+    setType(content?.type);
     setTranscription(content?.transcription);
     setMeaning(content?.meaning);
     setExample(content?.example);
@@ -47,8 +49,8 @@ const FlashcardSheet = ({
       return;
     }
 
-    return { word, transcription, meaning, example, synonyms, antonyms } as IFlashcardContent;
-  }, [word, transcription, meaning, example, synonyms, antonyms]);
+    return { word, type, transcription, meaning, example, synonyms, antonyms } as IFlashcardContent;
+  }, [word, type, transcription, meaning, example, synonyms, antonyms]);
 
   React.useEffect(() => {
     setContentUpdate(updatedContent);
@@ -90,6 +92,15 @@ const FlashcardSheet = ({
                   value={word}
                   onChangeText={setWord}
                   placeholder="Word or phrase"
+                />
+
+                <Text style={styles.inputLabel}>Type</Text>
+                <TextInput
+                  style={styles.input}
+                  autoCapitalize="none"
+                  value={type}
+                  onChangeText={setType}
+                  placeholder="Type"
                 />
 
                 <Text style={styles.inputLabel}>Transcript</Text>
