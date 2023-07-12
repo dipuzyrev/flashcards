@@ -22,12 +22,19 @@ export const store = configureStore({
     dictionary: persistedDictionaryReducer,
     // app: appReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
+  middleware: (getDefaultMiddleware) => {
+    const middlewares = getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    });
+    if (__DEV__) {
+      const createDebugger = require("redux-flipper").default;
+      middlewares.push(createDebugger());
+    }
+    return middlewares;
+  },
+  devTools: process.env.NODE_ENV !== "production",
 });
 
 export const persistor = persistStore(store);

@@ -1,14 +1,13 @@
-import * as React from "react";
-import { Button, Text, View, StyleSheet, SafeAreaView, Pressable } from "react-native";
-import { useAppDispatch, useAppSelector } from "~/types/store";
-import { selectFlashcards, selectFlashcardsToReview } from "~/store/reducers/dictionarySlice";
-import { useSelector } from "react-redux";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { StudyStackParamList } from "~/types/navigation";
+import * as React from "react";
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { selectFlashcards, selectFlashcardsToReview } from "~/store/reducers/dictionarySlice";
+import { FlashcardsStackParamList } from "~/types/navigation";
+import { useAppSelector } from "~/types/store";
 
-type Props = NativeStackScreenProps<StudyStackParamList, "StudyHome">;
+type Props = NativeStackScreenProps<FlashcardsStackParamList, "StudyHome">;
 const StudyHome = ({ navigation }: Props) => {
-  const flashcards = useAppSelector(selectFlashcardsToReview);
+  const flashcards = Object.values(useAppSelector(selectFlashcardsToReview));
   const totalFlashcards = Object.values(useAppSelector(selectFlashcards));
   // const words = useSelector(selectWords);
   // console.log('totalFlashcards', totalFlashcards);
@@ -57,7 +56,7 @@ const styles = StyleSheet.create({
   mainActionBtn: {
     padding: 32,
     paddingVertical: 16,
-    backgroundColor: "#000",
+    backgroundColor: "#222",
     borderRadius: 8,
   },
   mainActionBtnText: {

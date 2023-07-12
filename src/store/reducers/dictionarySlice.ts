@@ -1,15 +1,14 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState, store } from "~/store/store";
 import dayjs from "dayjs";
+import { SuperMemoGrade } from "supermemo";
+import { RootState } from "~/store/store";
+import { IFlashcard, IFlashcardContent } from "~/types/dictionary";
 import { srsFunc } from "~/utils/spaced-repetition/anki-like-algorithm";
 import { getLateness } from "~/utils/spaced-repetition/lateness";
-import { SuperMemoGrade } from "supermemo";
-import { Definition, Flashcard } from "~/types/dictionary";
-import { WritableDraft } from "immer/dist/internal";
 
 interface FlashcardsState {
-  definitions: Record<number, Definition>;
-  flashcards: Record<number, Flashcard>;
+  definitions: Record<number, IFlashcardContent>;
+  flashcards: Record<number, IFlashcard>;
 }
 
 const initialState: FlashcardsState = {
@@ -29,12 +28,12 @@ export const dictionarySlice = createSlice({
   name: "dictionary",
   initialState,
   reducers: {
-    addDefinitions: (state, action: PayloadAction<Definition[]>) => {
+    addDefinitions: (state, action: PayloadAction<IFlashcardContent[]>) => {
       const definitions = action.payload;
       definitions.forEach((definition) => {
         if (
           Object.values(state.definitions).find(
-            (d) => d.word === definition.word && d.definition === definition.definition
+            (d) => d.word === definition.word && d.meaning === definition.meaning
           )
         ) {
           return;
@@ -88,10 +87,12 @@ export const selectFlashcards = (state: RootState) => state.dictionary.flashcard
 export const selectDefinitions = (state: RootState) => state.dictionary.definitions;
 
 export const selectFlashcardsToReview = createSelector([selectFlashcards], (flashcards) => {
-  const flashcardsToReview = Object.entries(flashcards).filter(([_, f]) => {
-    const dueDate = dayjs(f.dueDate);
-    return dueDate.isBefore(dayjs(Date.now()));
-  });
+  const flashcardsToReview = Object.fromEntries(
+    Object.entries(flashcards).filter(([_, f]) => {
+      const dueDate = dayjs(f.dueDate);
+      return dueDate.isBefore(dayjs(Date.now()));
+    })
+  );
   return flashcardsToReview;
 });
 

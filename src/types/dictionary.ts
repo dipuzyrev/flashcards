@@ -1,9 +1,11 @@
-export interface Definition {
+export interface IFlashcardContent {
   word: string;
-  wordType: string; // enum?
-  definition: string;
+  type: string;
+  transcription: string;
+  meaning: string;
   example: string;
   synonyms: string[];
+  antonyms: string[];
 }
 
 type Direction = "toDefinition" | "fromDefinition";
@@ -21,7 +23,7 @@ export interface SuperMemoEvaluation {
   lateness: number;
 }
 
-export interface Flashcard extends SuperMemoItem {
+export interface IFlashcard extends SuperMemoItem {
   definitionId: number;
   direction: Direction;
   dueDate: string;

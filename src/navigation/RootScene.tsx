@@ -1,57 +1,82 @@
-import * as React from "react";
-import { NavigationContainer, NavigatorScreenParams } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import TranslateForm from "~/screens/TranslateForm";
-import TranslateResult from "~/screens/TranslateResult";
-import StudyHome from "~/screens/StudyHome";
-import StudyCard from "~/screens/StudyCard/StudyCard";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import * as React from "react";
 import { SFSymbol } from "react-native-sfsymbols";
-import { TranslateStackParamList, StudyStackParamList, TabParamList } from "~/types/navigation";
+import ExplanationScreen from "~/screens/ExplanationScreen/ExplanationScreen";
+import HomeScreen from "~/screens/HomeScreen";
+import SettingsHome from "~/screens/SettingsHome";
+import StudyCard from "~/screens/StudyCard/StudyCard";
+import StudyHome from "~/screens/StudyHome";
+import {
+  FlashcardsStackParamList,
+  HomeStackParamList,
+  RootScreens,
+  SettingsStackParamList,
+  TabIcons,
+  TabParamList,
+} from "~/types/navigation";
 // import { wordsToReviewCount } from '~/store/reducers/dictionarySlice';
 
-const TranslateStack = createNativeStackNavigator<TranslateStackParamList>();
-const StudyStack = createNativeStackNavigator<StudyStackParamList>();
+const HomeStack = createNativeStackNavigator<HomeStackParamList>();
+const FlashcardsStack = createNativeStackNavigator<FlashcardsStackParamList>();
+const SettingsStack = createNativeStackNavigator<SettingsStackParamList>();
 
-function TranslateStackScreen() {
+function HomeStackScreen() {
   return (
-    <TranslateStack.Navigator
+    <HomeStack.Navigator
       screenOptions={{
         headerBackTitle: "Back",
       }}
     >
-      <TranslateStack.Screen
-        name="TranslateForm"
-        options={{ title: "Explain" }}
-        component={TranslateForm}
-      />
-      <TranslateStack.Screen
-        name="TranslateResult"
-        options={{ title: "Definitions" }}
-        component={TranslateResult}
-      />
-    </TranslateStack.Navigator>
-  );
-}
-
-function StudyStackScreen() {
-  return (
-    <StudyStack.Navigator
-      screenOptions={{
-        headerBackTitle: "Back",
-      }}
-    >
-      <StudyStack.Screen
-        name="StudyHome"
-        options={{ title: "Study Cards" }}
-        component={StudyHome}
-      />
-      <StudyStack.Screen
+      <HomeStack.Screen name="HomeScreen" options={{ title: "Home" }} component={HomeScreen} />
+      <FlashcardsStack.Screen
         name="StudyCard"
         options={{ title: "Study Cards" }}
         component={StudyCard}
       />
-    </StudyStack.Navigator>
+      <HomeStack.Screen
+        name="ExplanationScreen"
+        options={{ title: "Definitions" }}
+        component={ExplanationScreen}
+      />
+    </HomeStack.Navigator>
+  );
+}
+
+function FlashcardsStackScreen() {
+  return (
+    <FlashcardsStack.Navigator
+      screenOptions={{
+        headerBackTitle: "Back",
+      }}
+    >
+      <FlashcardsStack.Screen
+        name="StudyHome"
+        options={{ title: "Study Cards" }}
+        component={StudyHome}
+      />
+      <FlashcardsStack.Screen
+        name="StudyCard"
+        options={{ title: "Study Cards" }}
+        component={StudyCard}
+      />
+    </FlashcardsStack.Navigator>
+  );
+}
+
+function SettingsStackScreen() {
+  return (
+    <SettingsStack.Navigator
+      screenOptions={{
+        headerBackTitle: "Back",
+      }}
+    >
+      <SettingsStack.Screen
+        name="SettingsHome"
+        options={{ title: "Settings" }}
+        component={SettingsHome}
+      />
+    </SettingsStack.Navigator>
   );
 }
 
@@ -65,13 +90,9 @@ const RootScene = () => {
         headerShown: false,
         // tabBarBadge: route.name === 'Study' && wordsCount !== 0 ? wordsCount : undefined,
         tabBarIcon: ({ color, size }) => {
-          const icons = {
-            Translate: "doc.text.magnifyingglass",
-            Study: "doc.text.image",
-          };
           return (
             <SFSymbol
-              name={icons[route.name]}
+              name={TabIcons[route.name]}
               weight="semibold"
               color={color}
               size={16}
@@ -82,8 +103,9 @@ const RootScene = () => {
         },
       })}
     >
-      <Tab.Screen name="Translate" component={TranslateStackScreen} />
-      <Tab.Screen name="Study" component={StudyStackScreen} />
+      <Tab.Screen name={RootScreens.Home} component={HomeStackScreen} />
+      <Tab.Screen name={RootScreens.Flashcards} component={FlashcardsStackScreen} />
+      <Tab.Screen name={RootScreens.Settings} component={SettingsStackScreen} />
     </Tab.Navigator>
   );
 };

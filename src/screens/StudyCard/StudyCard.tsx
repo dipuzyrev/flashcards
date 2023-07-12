@@ -7,9 +7,9 @@ import { shuffleArray } from "~/utils/shuffle";
 import { SuperMemoGrade } from "supermemo";
 import ReviewButton from "./ReviewButton";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { StudyStackParamList } from "~/types/navigation";
+import { FlashcardsStackParamList } from "~/types/navigation";
 
-type Props = NativeStackScreenProps<StudyStackParamList, "StudyCard">;
+type Props = NativeStackScreenProps<FlashcardsStackParamList, "StudyCard">;
 const StudyCard = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
 

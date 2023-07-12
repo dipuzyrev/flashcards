@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Button, Text, View, StyleSheet, Pressable } from "react-native";
-import { useAppSelector } from "~/types/store";
+import { Pressable, StyleSheet, Text } from "react-native";
 import { selectDefinitions } from "~/store/reducers/dictionarySlice";
-import { Flashcard } from "~/types/dictionary";
+import { IFlashcard } from "~/types/dictionary";
+import { useAppSelector } from "~/types/store";
 
-type Props = { flashcard: Flashcard; onFlip: () => void };
+type Props = { flashcard: IFlashcard; onFlip: () => void };
 const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
   const definitions = useAppSelector(selectDefinitions);
   const definition = definitions[flashcard.definitionId];
@@ -30,7 +30,7 @@ const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
       onPress={flipCard}
     >
       <Text style={{ ...styles.wordType, ...(reversed ? { color: "#eee" } : {}) }}>
-        {definition.wordType}
+        {definition.type}
       </Text>
       <Text style={{ ...styles.mainText, ...(reversed ? { color: "#eee" } : {}) }}>
         {flipped ? back : front}
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     borderWidth: 1,
-    borderColor: "#000",
+    borderColor: "#222",
     borderRadius: 8,
     padding: 16,
   },
