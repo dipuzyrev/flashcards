@@ -11,7 +11,7 @@ export type HomeStackParamList = {
 };
 
 export type FlashcardsStackParamList = {
-  StudyHome: undefined;
+  FlashcardListScreen: undefined;
   StudyCard: undefined;
 };
 

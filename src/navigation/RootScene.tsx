@@ -3,10 +3,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { SFSymbol } from "react-native-sfsymbols";
 import ExplanationScreen from "~/screens/ExplanationScreen/ExplanationScreen";
+import FlashcardListScreen from "~/screens/FlashcardListScreen";
 import HomeScreen from "~/screens/HomeScreen";
 import SettingsHome from "~/screens/SettingsHome";
 import StudyCard from "~/screens/StudyCard/StudyCard";
-import StudyHome from "~/screens/StudyHome";
 import {
   FlashcardsStackParamList,
   HomeStackParamList,
@@ -51,9 +51,9 @@ function FlashcardsStackScreen() {
       }}
     >
       <FlashcardsStack.Screen
-        name="StudyHome"
+        name="FlashcardListScreen"
         options={{ title: "Study Cards" }}
-        component={StudyHome}
+        component={FlashcardListScreen}
       />
       <FlashcardsStack.Screen
         name="StudyCard"

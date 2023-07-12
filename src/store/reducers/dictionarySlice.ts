@@ -63,6 +63,25 @@ export const dictionarySlice = createSlice({
         };
       });
     },
+    updateDefinition: (
+      state,
+      action: PayloadAction<{ definitionKey: number; content: IFlashcardContent }>
+    ) => {
+      const { definitionKey, content } = action.payload;
+      const definition = state.definitions[definitionKey];
+      state.definitions[definitionKey] = { ...definition, ...content };
+    },
+    deleteFlashcard: (
+      state,
+      action: PayloadAction<{ flashcardKey: number; definitionKey: number }>
+    ) => {
+      const { flashcardKey, definitionKey } = action.payload;
+      delete state.flashcards[flashcardKey];
+
+      if (!Object.values(state.flashcards).find((f) => f.definitionId === definitionKey)) {
+        delete state.definitions[definitionKey];
+      }
+    },
     practice: (state, action: PayloadAction<{ id: number; grade: SuperMemoGrade }>) => {
       const { id, grade } = action.payload;
       const flashcard = state.flashcards[id];
@@ -79,7 +98,8 @@ export const dictionarySlice = createSlice({
   },
 });
 
-export const { addDefinitions, practice } = dictionarySlice.actions;
+export const { addDefinitions, updateDefinition, deleteFlashcard, practice } =
+  dictionarySlice.actions;
 export const selectDictionary = (state: RootState) => state.dictionary;
 // export const selectWords = (state: RootState) => state.dictionary.words;
 

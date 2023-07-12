@@ -67,7 +67,13 @@ const HomeScreen = ({ navigation }: Props) => {
             <Text style={styles.checkboxLabel}>Auto flashcard creation</Text>
             <Switch onValueChange={setAutoCardCreation} value={autoCardCreation} />
           </View> */}
-          <AppButton variant="secondary" width="full" disabled={!word} onPress={onExplainClick}>
+          <AppButton
+            variant="solid"
+            role="secondary"
+            width="full"
+            disabled={!word}
+            onPress={onExplainClick}
+          >
             Explain
           </AppButton>
         </View>

@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { callApi } from "~/api/openai";
+import AppButton from "~/components/AppButton";
 import { addDefinitions } from "~/store/reducers/dictionarySlice";
 import { IFlashcardContent } from "~/types/dictionary";
 import { HomeStackParamList } from "~/types/navigation";
@@ -54,6 +55,7 @@ const ExplanationScreen = ({ navigation, route }: Props) => {
     }
     const flashcard = JSON.parse(response) as IFlashcardContent;
     setFlashcardContent(flashcard);
+    setFlashcardContentUpdate(flashcard);
   };
 
   const onAddClick = () => {
@@ -72,10 +74,23 @@ const ExplanationScreen = ({ navigation, route }: Props) => {
 
   const [showModal, setShowModal] = React.useState(false);
   const [flashcardContent, setFlashcardContent] = React.useState<IFlashcardContent>();
-  const onConfirm = (content: IFlashcardContent) => {
+  const [flashcardContentUpdate, setFlashcardContentUpdate] = React.useState<IFlashcardContent>();
+
+  const onConfirm = () => {
+    if (!flashcardContentUpdate) {
+      return;
+    }
+
     setShowModal(false);
-    dispatch(addDefinitions([content]));
+    dispatch(addDefinitions([flashcardContentUpdate]));
     setSelectedDefinition(undefined);
+    setFlashcardContent(undefined);
+  };
+  const onHideModal = () => {
+    setShowModal(false);
+    setFlashcardContentUpdate(undefined);
+    setSelectedDefinition(undefined);
+    setFlashcardContent(undefined);
   };
 
   // const dummyFlashcardContent = {
@@ -92,9 +107,19 @@ const ExplanationScreen = ({ navigation, route }: Props) => {
     <SafeAreaView style={styles.safeArea}>
       <FlashcardSheet
         show={showModal}
-        onConfirm={onConfirm}
-        onCancel={() => setShowModal(false)}
+        onHideModal={onHideModal}
         content={flashcardContent}
+        setContentUpdate={setFlashcardContentUpdate}
+        leftButtonComponent={
+          <AppButton onPress={onHideModal} variant="inline">
+            Cancel
+          </AppButton>
+        }
+        rightButtonComponent={
+          <AppButton onPress={onConfirm} disabled={!flashcardContentUpdate} variant="inline" bold>
+            Add Card
+          </AppButton>
+        }
       />
       {!meanings.length ? (
         error ? (
