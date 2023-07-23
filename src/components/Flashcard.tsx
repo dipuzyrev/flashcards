@@ -1,5 +1,7 @@
 import * as React from "react";
 import { ImageBackground, Pressable, StyleSheet, Text, View } from "react-native";
+import { SFSymbol } from "react-native-sfsymbols";
+import Tts from "react-native-tts";
 import { selectDefinitions } from "~/store/reducers/dictionarySlice";
 import { IFlashcard } from "~/types/dictionary";
 import { useAppSelector } from "~/types/store";
@@ -29,12 +31,33 @@ const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
   const bgImage = require("~/img/card-bg.png");
   const emptyBgImage = require("~/img/card-bg-empty.png");
 
+  const pronounceWord = () => {
+    Tts.speak(definition.word);
+  };
+
   return (
     <ImageBackground source={flipped ? emptyBgImage : bgImage} style={styles.image}>
       <Pressable style={{ ...styles.container, ...(reversed ? {} : {}) }} onPress={flipCard}>
         <View style={styles.cardHeader}>
           <Text style={styles.type}>{definition.type}</Text>
-          <View style={styles.dot}></View>
+          <Pressable
+            style={[
+              styles.pronounceBtn,
+              {
+                opacity: flipped ? 1 : 0,
+              },
+            ]}
+            onPress={pronounceWord}
+          >
+            <SFSymbol
+              name="waveform.circle.fill"
+              weight="semibold"
+              color={"#777"}
+              size={26}
+              resizeMode="center"
+              multicolor={false}
+            />
+          </Pressable>
         </View>
 
         <View style={styles.cardBody}>
@@ -135,13 +158,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  dot: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: "#F1F1F1",
-    borderWidth: 1,
-    borderColor: "#D3D3D3",
+  pronounceBtn: {
+    width: 30,
+    height: 30,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   type: {
     color: "#777",
