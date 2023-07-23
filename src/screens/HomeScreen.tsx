@@ -10,35 +10,93 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { callApi } from "~/api/openai";
 import AppButton from "~/components/AppButton";
-import { selectFlashcards, selectFlashcardsToReview } from "~/store/reducers/dictionarySlice";
+import {
+  addDefinitions,
+  selectFlashcards,
+  selectFlashcardsToReview,
+} from "~/store/reducers/dictionarySlice";
+import { IFlashcardContent } from "~/types/dictionary";
 import { HomeStackParamList } from "~/types/navigation";
-import { useAppSelector } from "~/types/store";
+import { useAppDispatch, useAppSelector } from "~/types/store";
+import { flashcardPrompt } from "~/utils/prompts";
+import FlashcardSheet from "./ExplanationScreen/FlashcardSheet";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "HomeScreen">;
 const HomeScreen = ({ navigation }: Props) => {
-  // Flashcards to review
+  const dispatch = useAppDispatch();
+
+  // Flashcards to review widget
+
   const totalFlashcards = Object.values(useAppSelector(selectFlashcards));
   const flashcardsToReview = Object.values(useAppSelector(selectFlashcardsToReview));
   const onReviewClick = () => {
     navigation.navigate("StudyCard");
   };
 
-  // Explain form
+  // Create flashcard widget
+
   const [word, setWord] = React.useState("");
   const [context, setContext] = React.useState("");
-  const [autoCardCreation, setAutoCardCreation] = React.useState(false);
-  const onExplainClick = () => {
+
+  const onCreateClick = () => {
     if (!word) {
+      return;
+    }
+    setContext("");
+    setShowModal(true);
+    const prompt = flashcardPrompt(word, context);
+    callApi(prompt)
+      .then(handleFlashcardResponse)
+      .catch((error) => {
+        // @ts-ignore
+        alert(error.message);
+      });
+  };
+
+  const handleFlashcardResponse = (response?: string) => {
+    if (!response) {
+      return;
+    }
+    const flashcard = JSON.parse(response) as IFlashcardContent;
+    setFlashcardContent(flashcard);
+    setFlashcardContentUpdate(flashcard);
+  };
+
+  // Flashcard sheet
+
+  const [showModal, setShowModal] = React.useState(false);
+  const [flashcardContent, setFlashcardContent] = React.useState<IFlashcardContent>();
+  const [flashcardContentUpdate, setFlashcardContentUpdate] = React.useState<IFlashcardContent>();
+
+  const onCardConfirm = () => {
+    if (!flashcardContentUpdate) {
       return;
     }
     setWord("");
     setContext("");
-    navigation.navigate("ExplanationScreen", {
-      word,
-      context,
-      autoCardCreation,
-    });
+    setShowModal(false);
+    dispatch(addDefinitions([flashcardContentUpdate]));
+    setFlashcardContent(undefined);
+  };
+
+  const onHideModal = () => {
+    setWord("");
+    setContext("");
+    setShowModal(false);
+    setFlashcardContentUpdate(undefined);
+    setFlashcardContent(undefined);
+  };
+
+  const onRegenerateClick = () => {
+    if (!context) {
+      return;
+    }
+    setShowModal(false);
+    setFlashcardContentUpdate(undefined);
+    setFlashcardContent(undefined);
+    onCreateClick();
   };
 
   return (
@@ -60,36 +118,70 @@ const HomeScreen = ({ navigation }: Props) => {
             </AppButton>
           </View>
           <View style={[styles.widget, styles.formContainer]}>
-            <TextInput
-              style={styles.input}
-              autoCapitalize="none"
-              value={word}
-              onChangeText={setWord}
-              onSubmitEditing={onExplainClick}
-              placeholder="Word or phrase"
-            />
-            {/* <TextInput
+            <View style={styles.inputsWrapper}>
+              <TextInput
                 style={styles.input}
-                autoCapitalize="none"
+                // autoCapitalize="none"
+                value={word}
+                onChangeText={setWord}
+                onSubmitEditing={onCreateClick}
+                placeholder="Word or phrase"
+              />
+
+              <TextInput
+                style={styles.input}
+                // autoCapitalize="none"
                 value={context}
                 onChangeText={setContext}
-                onSubmitEditing={onExplainClick}
-                placeholder="Optional context"
-              /> */}
-            {/* <View style={styles.checkboxContainer}>
-                <Text style={styles.checkboxLabel}>Auto flashcard creation</Text>
-                <Switch onValueChange={setAutoCardCreation} value={autoCardCreation} />
-              </View> */}
+                onSubmitEditing={onCreateClick}
+                placeholder="Context (optional)"
+              />
+            </View>
             <AppButton
               variant="solid"
               role="secondary"
               width="full"
               disabled={!word}
-              onPress={onExplainClick}
+              onPress={onCreateClick}
             >
-              Explain
+              Create Flashcard
             </AppButton>
           </View>
+          <FlashcardSheet
+            show={showModal}
+            onHideModal={onHideModal}
+            content={flashcardContent}
+            setContentUpdate={setFlashcardContentUpdate}
+            leftButtonComponent={
+              <AppButton onPress={onHideModal} variant="inline">
+                Cancel
+              </AppButton>
+            }
+            rightButtonComponent={
+              <AppButton
+                onPress={onCardConfirm}
+                disabled={!flashcardContentUpdate}
+                variant="inline"
+                bold
+              >
+                Add Card
+              </AppButton>
+            }
+            footerComponent={
+              <View style={styles.footer}>
+                <TextInput
+                  style={styles.footerInput}
+                  value={context}
+                  onChangeText={setContext}
+                  placeholder="Context"
+                  onSubmitEditing={onRegenerateClick}
+                />
+                <AppButton onPress={onRegenerateClick} disabled={!context} width="auto">
+                  Regenerate
+                </AppButton>
+              </View>
+            }
+          />
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -122,6 +214,7 @@ const styles = StyleSheet.create({
     borderColor: "#E2E2E2",
     justifyContent: "center",
   },
+  // Flashcards to review widget
   cardsInfoContainer: {
     flex: 1,
   },
@@ -136,8 +229,12 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     textAlign: "center",
   },
+  // Create flashcard widget
   formContainer: {
     justifyContent: "center",
+  },
+  inputsWrapper: {
+    display: "flex",
   },
   input: {
     fontSize: 15,
@@ -147,17 +244,21 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
   },
-  checkboxContainer: {
+  // Flashcard sheet footer
+  footer: {
+    display: "flex",
     flexDirection: "row",
+    gap: 16,
     alignItems: "center",
-    justifyContent: "space-between",
-    gap: 0,
-    marginBottom: 16,
+    width: "100%",
   },
-  checkboxLabel: {
+  footerInput: {
     fontSize: 15,
-    color: "#222",
-    marginRight: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 16,
+    borderRadius: 12,
+    flex: 1,
   },
 });
 

@@ -3,8 +3,8 @@ import dayjs from "dayjs";
 import { SuperMemoGrade } from "supermemo";
 import { RootState } from "~/store/store";
 import { IFlashcard, IFlashcardContent } from "~/types/dictionary";
-import { srsFunc } from "~/utils/spaced-repetition/anki-like-algorithm";
 import { getLateness } from "~/utils/spaced-repetition/lateness";
+import { srsFunc } from "~/utils/spaced-repetition/sm2";
 
 interface FlashcardsState {
   definitions: Record<number, IFlashcardContent>;

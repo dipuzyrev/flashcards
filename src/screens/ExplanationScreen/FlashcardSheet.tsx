@@ -1,11 +1,15 @@
 import * as React from "react";
 import {
   ActivityIndicator,
+  Keyboard,
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { IFlashcardContent } from "~/types/dictionary";
@@ -17,6 +21,7 @@ type Props = {
   rightButtonComponent: React.ReactNode;
   setContentUpdate: (content: IFlashcardContent | undefined) => void;
   onHideModal: () => void;
+  footerComponent?: React.ReactNode;
 };
 const FlashcardSheet = ({
   show = true,
@@ -24,6 +29,7 @@ const FlashcardSheet = ({
   rightButtonComponent,
   onHideModal,
   content,
+  footerComponent,
   setContentUpdate,
 }: Props) => {
   const [word, setWord] = React.useState(content?.word);
@@ -72,89 +78,96 @@ const FlashcardSheet = ({
       onRequestClose={onHideModal}
       presentationStyle="pageSheet"
     >
-      <View style={styles.modalContainer}>
-        {!content ? (
-          <View style={styles.loaderContainer}>
-            <ActivityIndicator />
-          </View>
-        ) : (
-          <>
-            <View style={styles.modalHeader}>
-              {leftButtonComponent}
-              {rightButtonComponent}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 36 : 36}
+        style={styles.modalContainer}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          {!content ? (
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator />
             </View>
-            <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-              <View style={styles.modalBody}>
-                <Text style={styles.inputLabel}>Word or Phrase (*)</Text>
-                <TextInput
-                  style={styles.input}
-                  autoCapitalize="none"
-                  value={word}
-                  onChangeText={setWord}
-                  placeholder="Word or phrase"
-                />
-
-                <Text style={styles.inputLabel}>Type</Text>
-                <TextInput
-                  style={styles.input}
-                  autoCapitalize="none"
-                  value={type}
-                  onChangeText={setType}
-                  placeholder="Type"
-                />
-
-                <Text style={styles.inputLabel}>Transcript</Text>
-                <TextInput
-                  style={styles.input}
-                  autoCapitalize="none"
-                  value={transcription}
-                  onChangeText={setTranscription}
-                  placeholder="Transcript"
-                />
-
-                <Text style={styles.inputLabel}>Meaning (*)</Text>
-                <TextInput
-                  multiline
-                  style={[styles.input, styles.multilineInput]}
-                  autoCapitalize="none"
-                  value={meaning}
-                  onChangeText={setMeaning}
-                  placeholder="Meaning"
-                />
-
-                <Text style={styles.inputLabel}>Example</Text>
-                <TextInput
-                  multiline
-                  style={[styles.input, styles.multilineInput]}
-                  autoCapitalize="none"
-                  value={example}
-                  onChangeText={setExample}
-                  placeholder="Example"
-                />
-
-                <Text style={styles.inputLabel}>Synonyms</Text>
-                <TextInput
-                  style={styles.input}
-                  autoCapitalize="none"
-                  value={synonyms.join(", ")}
-                  onChangeText={(val) => setWordsArray(val, "synonyms")}
-                  placeholder="Synonyms"
-                />
-
-                <Text style={styles.inputLabel}>Antonyms</Text>
-                <TextInput
-                  style={styles.input}
-                  autoCapitalize="none"
-                  value={antonyms.join(", ")}
-                  onChangeText={(val) => setWordsArray(val, "antonyms")}
-                  placeholder="Antonyms"
-                />
+          ) : (
+            <>
+              <View style={styles.modalHeader}>
+                {leftButtonComponent}
+                {rightButtonComponent}
               </View>
-              <View style={{ height: 50 }} />
-            </ScrollView>
-          </>
-        )}
-      </View>
+              <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+                <View style={styles.modalBody}>
+                  <Text style={styles.inputLabel}>Word or Phrase (*)</Text>
+                  <TextInput
+                    style={styles.input}
+                    autoCapitalize="none"
+                    value={word}
+                    onChangeText={setWord}
+                    placeholder="Word or phrase"
+                  />
+
+                  <Text style={styles.inputLabel}>Type</Text>
+                  <TextInput
+                    style={styles.input}
+                    autoCapitalize="none"
+                    value={type}
+                    onChangeText={setType}
+                    placeholder="Type"
+                  />
+
+                  <Text style={styles.inputLabel}>Transcript</Text>
+                  <TextInput
+                    style={styles.input}
+                    autoCapitalize="none"
+                    value={transcription}
+                    onChangeText={setTranscription}
+                    placeholder="Transcript"
+                  />
+
+                  <Text style={styles.inputLabel}>Meaning (*)</Text>
+                  <TextInput
+                    multiline
+                    style={[styles.input, styles.multilineInput]}
+                    autoCapitalize="none"
+                    value={meaning}
+                    onChangeText={setMeaning}
+                    placeholder="Meaning"
+                  />
+
+                  <Text style={styles.inputLabel}>Example</Text>
+                  <TextInput
+                    multiline
+                    style={[styles.input, styles.multilineInput]}
+                    autoCapitalize="none"
+                    value={example}
+                    onChangeText={setExample}
+                    placeholder="Example"
+                  />
+
+                  <Text style={styles.inputLabel}>Synonyms</Text>
+                  <TextInput
+                    style={styles.input}
+                    autoCapitalize="none"
+                    value={synonyms.join(", ")}
+                    onChangeText={(val) => setWordsArray(val, "synonyms")}
+                    placeholder="Synonyms"
+                  />
+
+                  <Text style={styles.inputLabel}>Antonyms</Text>
+                  <TextInput
+                    style={styles.input}
+                    autoCapitalize="none"
+                    value={antonyms.join(", ")}
+                    onChangeText={(val) => setWordsArray(val, "antonyms")}
+                    placeholder="Antonyms"
+                  />
+                </View>
+                <View style={{ height: footerComponent ? 0 : 50 }} />
+              </ScrollView>
+              {footerComponent && <View style={styles.footerComponentWrap}>{footerComponent}</View>}
+            </>
+          )}
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
@@ -204,6 +217,20 @@ const styles = StyleSheet.create({
     marginTop: 16,
     color: "#777",
     fontWeight: "500",
+  },
+  footerComponentWrap: {
+    borderTopColor: "#e2e2e2",
+    borderTopWidth: 1,
+    padding: 16,
+    paddingBottom: 50,
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
   },
 });
 
