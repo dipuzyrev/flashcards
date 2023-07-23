@@ -12,11 +12,7 @@ import {
 } from "react-native";
 import { callApi } from "~/api/openai";
 import AppButton from "~/components/AppButton";
-import {
-  addDefinitions,
-  selectFlashcards,
-  selectFlashcardsToReview,
-} from "~/store/reducers/dictionarySlice";
+import { addDefinitions, selectFlashcardsToReview } from "~/store/reducers/dictionarySlice";
 import { IFlashcardContent } from "~/types/dictionary";
 import { HomeStackParamList } from "~/types/navigation";
 import { useAppDispatch, useAppSelector } from "~/types/store";
@@ -29,7 +25,6 @@ const HomeScreen = ({ navigation }: Props) => {
 
   // Flashcards to review widget
 
-  const totalFlashcards = Object.values(useAppSelector(selectFlashcards));
   const flashcardsToReview = Object.values(useAppSelector(selectFlashcardsToReview));
   const onReviewClick = () => {
     navigation.navigate("StudyCard");
@@ -107,15 +102,9 @@ const HomeScreen = ({ navigation }: Props) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <View style={[styles.widget, styles.cardsInfoContainer]}>
-            <Text style={styles.totalCards}>{totalFlashcards.length}</Text>
-            <Text style={styles.totalCardsSubtitle}>Flashcards Total</Text>
-            <AppButton disabled={!flashcardsToReview.length} onPress={onReviewClick}>
-              {flashcardsToReview.length
-                ? `Review ${flashcardsToReview.length} Card${
-                    flashcardsToReview.length > 1 ? "s" : ""
-                  }`
-                : "Nothing to Review"}
-            </AppButton>
+            <Text style={styles.cardToReview}>{flashcardsToReview.length}</Text>
+            <Text style={styles.cardsToReviewCaption}>Card(s) to Review</Text>
+            {!!flashcardsToReview.length && <AppButton onPress={onReviewClick}>Review</AppButton>}
           </View>
           <View style={[styles.widget, styles.formContainer]}>
             <View style={styles.inputsWrapper}>
@@ -218,12 +207,12 @@ const styles = StyleSheet.create({
   cardsInfoContainer: {
     flex: 1,
   },
-  totalCards: {
+  cardToReview: {
     fontSize: 52,
     fontWeight: "800",
     textAlign: "center",
   },
-  totalCardsSubtitle: {
+  cardsToReviewCaption: {
     fontSize: 15,
     fontWeight: "500",
     marginBottom: 32,
