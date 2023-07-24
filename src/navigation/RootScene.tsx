@@ -80,7 +80,7 @@ const RootScene = () => {
         // tabBarBadge: route.name === 'Study' && wordsCount !== 0 ? wordsCount : undefined,
         tabBarIcon: ({ color, size }) => {
           const Icon = TabIcons[route.name];
-          return <Icon width={20} height={20} color={color} />;
+          return <Icon width={22} height={22} color={color} />;
         },
         tabBarLabelStyle: {
           fontWeight: "500",
