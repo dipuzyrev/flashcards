@@ -29,11 +29,7 @@ function HomeStackScreen() {
       }}
     >
       <HomeStack.Screen name="HomeScreen" options={{ title: "Home" }} component={HomeScreen} />
-      <FlashcardsStack.Screen
-        name="StudyCard"
-        options={{ title: "Study Cards" }}
-        component={StudyCard}
-      />
+      <HomeStack.Screen name="StudyCard" options={{ title: "Study Cards" }} component={StudyCard} />
       <HomeStack.Screen
         name="ExplanationScreen"
         options={{ title: "Definitions" }}
@@ -54,11 +50,6 @@ function FlashcardsStackScreen() {
         name="FlashcardListScreen"
         options={{ title: "Study Cards" }}
         component={FlashcardListScreen}
-      />
-      <FlashcardsStack.Screen
-        name="StudyCard"
-        options={{ title: "Study Cards" }}
-        component={StudyCard}
       />
     </FlashcardsStack.Navigator>
   );
