@@ -1,3 +1,4 @@
+import { useTheme } from "@react-navigation/native";
 import * as React from "react";
 import { ImageBackground, Pressable, StyleSheet, Text, View } from "react-native";
 import { SFSymbol } from "react-native-sfsymbols";
@@ -8,11 +9,11 @@ import { useAppSelector } from "~/types/store";
 
 type Props = { flashcard: IFlashcard; onFlip: () => void };
 const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
+  const { colors } = useTheme();
+
   const definitions = useAppSelector(selectDefinitions);
   const definition = definitions[flashcard.definitionId];
 
-  const front = flashcard.direction === "toDefinition" ? definition.word : definition.meaning;
-  const back = flashcard.direction === "toDefinition" ? definition.meaning : definition.word;
   const [flipped, setFlipped] = React.useState(false);
   const reversed = flashcard.direction !== "toDefinition";
 
@@ -36,10 +37,13 @@ const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
   };
 
   return (
-    <ImageBackground source={flipped ? emptyBgImage : bgImage} style={styles.image}>
-      <Pressable style={{ ...styles.container, ...(reversed ? {} : {}) }} onPress={flipCard}>
+    <ImageBackground
+      source={flipped ? emptyBgImage : bgImage}
+      style={[styles.image, { backgroundColor: colors.card, borderColor: colors.border }]}
+    >
+      <Pressable style={styles.container} onPress={flipCard}>
         <View style={styles.cardHeader}>
-          <Text style={styles.type}>{definition.type}</Text>
+          <Text style={[styles.type, { color: colors.textSecondary }]}>{definition.type}</Text>
           <Pressable
             style={[
               styles.pronounceBtn,
@@ -52,7 +56,7 @@ const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
             <SFSymbol
               name="waveform.circle.fill"
               weight="semibold"
-              color={"#777"}
+              color={colors.textSecondary}
               size={26}
               resizeMode="center"
               multicolor={false}
@@ -64,6 +68,7 @@ const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
           <Text
             style={[
               styles.word,
+              { color: colors.textPrimary },
               {
                 fontWeight: reversed ? "800" : "500",
                 opacity: reversed ? (flipped ? 1 : 0) : 1,
@@ -72,12 +77,19 @@ const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
           >
             {definition.word}
           </Text>
-          <Text style={[styles.transcription, { opacity: reversed ? (flipped ? 1 : 0) : 1 }]}>
+          <Text
+            style={[
+              styles.transcription,
+              { color: colors.textPrimary },
+              { opacity: reversed ? (flipped ? 1 : 0) : 1 },
+            ]}
+          >
             [{definition.transcription}]
           </Text>
           <Text
             style={[
               styles.meaning,
+              { color: colors.textPrimary },
               {
                 fontWeight: reversed ? "500" : "800",
                 opacity: reversed ? 1 : flipped ? 1 : 0,
@@ -86,10 +98,14 @@ const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
           >
             {definition.meaning}
           </Text>
-          <Text style={[styles.example, { opacity: flipped ? 1 : 0 }]}>“{definition.example}”</Text>
+          <Text
+            style={[styles.example, { color: colors.textPrimary }, { opacity: flipped ? 1 : 0 }]}
+          >
+            “{definition.example}”
+          </Text>
         </View>
 
-        <View style={[styles.cardFooter, { opacity: flipped ? 1 : 0 }]}>
+        {/* <View style={[styles.cardFooter, { opacity: flipped ? 1 : 0 }]}>
           <View>
             <Text style={styles.synonymsTitle}>Synonyms</Text>
             {definition.synonyms.length ? (
@@ -110,7 +126,7 @@ const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
               <Text style={styles.antonymItem}>–</Text>
             )}
           </View>
-        </View>
+        </View> */}
       </Pressable>
     </ImageBackground>
   );
@@ -132,8 +148,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 10,
     borderWidth: 1,
-    borderColor: "#D3D3D3",
-    backgroundColor: "#fff",
   },
   container: {
     width: "100%",
@@ -166,7 +180,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   type: {
-    color: "#777",
     fontSize: 15,
   },
   transcription: {
@@ -190,7 +203,6 @@ const styles = StyleSheet.create({
 
   synonymsTitle: {
     fontSize: 15,
-    color: "#777",
     textTransform: "uppercase",
     marginBottom: 4,
   },

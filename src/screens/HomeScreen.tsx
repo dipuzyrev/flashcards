@@ -1,3 +1,4 @@
+import { useTheme } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import * as React from "react";
 import {
@@ -22,6 +23,7 @@ import FlashcardSheet from "./ExplanationScreen/FlashcardSheet";
 type Props = NativeStackScreenProps<HomeStackParamList, "HomeScreen">;
 const HomeScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
+  const { colors } = useTheme();
 
   // Flashcards to review widget
 
@@ -101,15 +103,31 @@ const HomeScreen = ({ navigation }: Props) => {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <View style={[styles.widget, styles.cardsInfoContainer]}>
-            <Text style={styles.cardToReview}>{flashcardsToReview.length}</Text>
-            <Text style={styles.cardsToReviewCaption}>Card(s) to Review</Text>
+          <View
+            style={[
+              styles.widget,
+              styles.cardsInfoContainer,
+              { backgroundColor: colors.card, borderColor: colors.border },
+            ]}
+          >
+            <Text style={[styles.cardToReview, { color: colors.textPrimary }]}>
+              {flashcardsToReview.length}
+            </Text>
+            <Text style={[styles.cardsToReviewCaption, { color: colors.textSecondary }]}>
+              Card(s) to Review
+            </Text>
             {!!flashcardsToReview.length && <AppButton onPress={onReviewClick}>Review</AppButton>}
           </View>
-          <View style={[styles.widget, styles.formContainer]}>
+          <View
+            style={[
+              styles.widget,
+              styles.formContainer,
+              { backgroundColor: colors.card, borderColor: colors.border },
+            ]}
+          >
             <View style={styles.inputsWrapper}>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { borderColor: colors.border, color: colors.textPrimary }]}
                 // autoCapitalize="none"
                 value={word}
                 onChangeText={setWord}
@@ -118,7 +136,7 @@ const HomeScreen = ({ navigation }: Props) => {
               />
 
               <TextInput
-                style={styles.input}
+                style={[styles.input, { borderColor: colors.border, color: colors.textPrimary }]}
                 // autoCapitalize="none"
                 value={context}
                 onChangeText={setContext}
@@ -159,7 +177,10 @@ const HomeScreen = ({ navigation }: Props) => {
             footerComponent={
               <View style={styles.footer}>
                 <TextInput
-                  style={styles.footerInput}
+                  style={[
+                    styles.footerInput,
+                    { borderColor: colors.border, color: colors.textPrimary },
+                  ]}
                   value={context}
                   onChangeText={setContext}
                   placeholder="Context"
@@ -190,7 +211,6 @@ const styles = StyleSheet.create({
   },
   widget: {
     padding: 32,
-    backgroundColor: "#fff",
     borderRadius: 20,
     shadowColor: "#000",
     shadowOffset: {
@@ -200,7 +220,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 10,
     borderWidth: 1,
-    borderColor: "#E2E2E2",
     justifyContent: "center",
   },
   // Flashcards to review widget
@@ -229,7 +248,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#ccc",
     padding: 16,
     borderRadius: 12,
   },
@@ -244,7 +262,6 @@ const styles = StyleSheet.create({
   footerInput: {
     fontSize: 15,
     borderWidth: 1,
-    borderColor: "#ccc",
     padding: 16,
     borderRadius: 12,
     flex: 1,

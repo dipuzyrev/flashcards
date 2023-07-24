@@ -1,3 +1,4 @@
+import { useTheme } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import isEqual from "lodash/isEqual";
 import * as React from "react";
@@ -17,6 +18,7 @@ import FlashcardSheet from "./ExplanationScreen/FlashcardSheet";
 type Props = NativeStackScreenProps<FlashcardsStackParamList, "FlashcardListScreen">;
 const FlashcardListScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
+  const { colors } = useTheme();
 
   const flashcards = useAppSelector(selectFlashcards);
   const definitions = useAppSelector(selectDefinitions);
@@ -109,15 +111,18 @@ const FlashcardListScreen = ({ navigation }: Props) => {
             <Pressable
               key={item.id}
               onPress={() => onFlashcardPress(item)}
-              style={styles.flashcardItem}
+              style={[
+                styles.flashcardItem,
+                { backgroundColor: colors.card, borderColor: colors.border },
+              ]}
             >
-              <Text style={styles.word}>
+              <Text style={[styles.word, { color: colors.textPrimary }]}>
                 {item.direction === "toDefinition" ? item.word : item.meaning}
               </Text>
-              <Text style={styles.meaning}>
+              <Text style={[styles.meaning, { color: colors.textPrimary }]}>
                 {item.direction === "fromDefinition" ? item.word : item.meaning}
               </Text>
-              <Text style={styles.stats}>{item.stats}</Text>
+              <Text style={[styles.stats, { color: colors.textSecondary }]}>{item.stats}</Text>
             </Pressable>
           );
         })}
@@ -142,7 +147,6 @@ const styles = StyleSheet.create({
   flashcardItem: {
     width: "100%",
     padding: 32,
-    backgroundColor: "#fff",
     borderRadius: 20,
     shadowColor: "#000",
     shadowOffset: {
@@ -152,7 +156,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 10,
     borderWidth: 1,
-    borderColor: "#E2E2E2",
     justifyContent: "center",
   },
   word: {
@@ -165,7 +168,6 @@ const styles = StyleSheet.create({
   },
   stats: {
     fontSize: 15,
-    color: "#777",
   },
 });
 

@@ -1,3 +1,4 @@
+import { useTheme } from "@react-navigation/native";
 import * as React from "react";
 import { Pressable, StyleSheet, Text } from "react-native";
 import { capitalize } from "~/utils/misc";
@@ -22,30 +23,79 @@ const AppButton = ({
   onPress,
   children,
 }: React.PropsWithChildren<Props>) => {
+  const { colors } = useTheme();
+
   const btnVariant = `btn${capitalize(variant)}`;
-  const btnVariantRole = `btn${capitalize(variant)}${capitalize(role)}`;
+
+  const [pressed, setPressed] = React.useState(false);
+
+  // @ts-ignore
+  let defaultStyle, pressedStyle, defaultTextStyle, pressedTextStyle;
+
+  switch (variant) {
+    case "solid":
+      switch (role) {
+        case "primary":
+          defaultStyle = { backgroundColor: colors.primaryDefault };
+          pressedStyle = { backgroundColor: colors.primaryPressed };
+          defaultTextStyle = { color: colors.primaryDefaultText };
+          pressedTextStyle = { color: colors.primaryPressedText };
+          break;
+        case "secondary":
+          defaultStyle = { backgroundColor: colors.secondaryDefault };
+          pressedStyle = { backgroundColor: colors.secondaryPressed };
+          defaultTextStyle = { color: colors.secondaryDefaultText };
+          pressedTextStyle = { color: colors.secondaryPressedText };
+          break;
+        case "danger":
+          defaultStyle = { backgroundColor: colors.dangerDefault };
+          pressedStyle = { backgroundColor: colors.dangerPressed };
+          defaultTextStyle = { color: colors.dangerDefaultText };
+          pressedTextStyle = { color: colors.dangerPressedText };
+          break;
+      }
+      break;
+    case "inline":
+      defaultStyle = { backgroundColor: "transparent" };
+      pressedStyle = { backgroundColor: "transparent" };
+      switch (role) {
+        case "primary":
+          defaultTextStyle = { color: colors.primaryDefault };
+          pressedTextStyle = { color: colors.primaryDefault, opacity: 0.5 };
+          break;
+        case "secondary":
+          defaultTextStyle = { color: colors.text };
+          pressedTextStyle = { color: colors.text, opacity: 0.5 };
+          break;
+        case "danger":
+          defaultTextStyle = { color: colors.dangerDefault };
+          pressedTextStyle = { color: colors.dangerDefault, opacity: 0.5 };
+          break;
+      }
+      break;
+  }
 
   return (
     <Pressable
+      onPressIn={() => setPressed(true)}
       onPress={onPress}
+      onPressOut={() => setPressed(false)}
       disabled={disabled}
-      style={({ pressed }) => {
-        return [
-          // @ts-ignore
-          styles[btnVariant],
-          // @ts-ignore
-          styles[btnVariantRole],
-          { opacity: disabled ? 0.3 : pressed ? 0.5 : 1 },
-          { alignSelf: width === "full" ? "stretch" : "center" },
-        ];
-      }}
+      style={[
+        // @ts-ignore
+        styles[btnVariant],
+        defaultStyle,
+        pressed ? pressedStyle : {},
+        { opacity: disabled ? 0.3 : 1 },
+        { alignSelf: width === "full" ? "stretch" : "center" },
+      ]}
     >
       <Text
         style={[
           styles.btnText,
-          // @ts-ignore
-          styles[btnVariantRole + "Text"],
           bold ? { fontWeight: "600" } : { fontWeight: "400" },
+          defaultTextStyle,
+          pressed ? pressedTextStyle : {},
         ]}
       >
         {children}
@@ -55,51 +105,14 @@ const AppButton = ({
 };
 
 const styles = StyleSheet.create({
-  // Solid
   btnSolid: {
     padding: 32,
     paddingVertical: 16,
     borderRadius: 12,
   },
-  btnSolidPrimary: {
-    backgroundColor: "#007AFE",
-  },
-  btnSolidPrimaryText: {
-    color: "#fff",
-  },
-
-  btnSolidSecondary: {
-    backgroundColor: "#DFDFDF",
-  },
-  btnSolidSecondaryText: {
-    color: "#222",
-  },
-
-  btnSolidDanger: {
-    backgroundColor: "#FF3B30",
-  },
-  btnSolidDangerText: {
-    color: "#fff",
-  },
-
-  // inline
   btnInline: {
     padding: 0,
     paddingVertical: 0,
-  },
-  btnInlinePrimary: {},
-  btnInlinePrimaryText: {
-    color: "#007AFE",
-  },
-
-  btnInlineSecondary: {},
-  btnInlineSecondaryText: {
-    color: "#222",
-  },
-
-  btnInlineDanger: {},
-  btnInlineDangerText: {
-    color: "#FF3B30",
   },
 
   btnText: {

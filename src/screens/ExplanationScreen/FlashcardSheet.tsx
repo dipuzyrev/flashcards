@@ -1,3 +1,4 @@
+import { useTheme } from "@react-navigation/native";
 import * as React from "react";
 import {
   ActivityIndicator,
@@ -32,6 +33,8 @@ const FlashcardSheet = ({
   footerComponent,
   setContentUpdate,
 }: Props) => {
+  const { colors } = useTheme();
+
   const [word, setWord] = React.useState(content?.word);
   const [type, setType] = React.useState(content?.type);
   const [transcription, setTranscription] = React.useState(content?.transcription);
@@ -81,7 +84,7 @@ const FlashcardSheet = ({
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 36 : 36}
-        style={styles.modalContainer}
+        style={[styles.modalContainer, { backgroundColor: colors.surfaceSecondary }]}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           {!content ? (
@@ -96,65 +99,79 @@ const FlashcardSheet = ({
               </View>
               <ScrollView contentContainerStyle={styles.scrollViewContainer}>
                 <View style={styles.modalBody}>
-                  <Text style={styles.inputLabel}>Word or Phrase (*)</Text>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>
+                    Word or Phrase (*)
+                  </Text>
                   <TextInput
-                    style={styles.input}
+                    style={[styles.input, { color: colors.text, borderColor: colors.border }]}
                     autoCapitalize="none"
                     value={word}
                     onChangeText={setWord}
                     placeholder="Word or phrase"
                   />
 
-                  <Text style={styles.inputLabel}>Type</Text>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Type</Text>
                   <TextInput
-                    style={styles.input}
+                    style={[styles.input, { color: colors.text, borderColor: colors.border }]}
                     autoCapitalize="none"
                     value={type}
                     onChangeText={setType}
                     placeholder="Type"
                   />
 
-                  <Text style={styles.inputLabel}>Transcript</Text>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>
+                    Transcript
+                  </Text>
                   <TextInput
-                    style={styles.input}
+                    style={[styles.input, { color: colors.text, borderColor: colors.border }]}
                     autoCapitalize="none"
                     value={transcription}
                     onChangeText={setTranscription}
                     placeholder="Transcript"
                   />
 
-                  <Text style={styles.inputLabel}>Meaning (*)</Text>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>
+                    Meaning (*)
+                  </Text>
                   <TextInput
                     multiline
-                    style={[styles.input, styles.multilineInput]}
+                    style={[
+                      styles.input,
+                      styles.multilineInput,
+                      { color: colors.text, borderColor: colors.border },
+                    ]}
                     autoCapitalize="none"
                     value={meaning}
                     onChangeText={setMeaning}
                     placeholder="Meaning"
                   />
 
-                  <Text style={styles.inputLabel}>Example</Text>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Example</Text>
                   <TextInput
                     multiline
-                    style={[styles.input, styles.multilineInput]}
+                    style={[
+                      styles.input,
+                      styles.multilineInput,
+                      { color: colors.text, borderColor: colors.border },
+                    ]}
                     autoCapitalize="none"
                     value={example}
                     onChangeText={setExample}
                     placeholder="Example"
                   />
 
-                  <Text style={styles.inputLabel}>Synonyms</Text>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Synonyms</Text>
                   <TextInput
-                    style={styles.input}
+                    style={[styles.input, { color: colors.text, borderColor: colors.border }]}
                     autoCapitalize="none"
                     value={synonyms.join(", ")}
                     onChangeText={(val) => setWordsArray(val, "synonyms")}
                     placeholder="Synonyms"
                   />
 
-                  <Text style={styles.inputLabel}>Antonyms</Text>
+                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Antonyms</Text>
                   <TextInput
-                    style={styles.input}
+                    style={[styles.input, { color: colors.text, borderColor: colors.border }]}
                     autoCapitalize="none"
                     value={antonyms.join(", ")}
                     onChangeText={(val) => setWordsArray(val, "antonyms")}
@@ -163,7 +180,16 @@ const FlashcardSheet = ({
                 </View>
                 <View style={{ height: footerComponent ? 0 : 50 }} />
               </ScrollView>
-              {footerComponent && <View style={styles.footerComponentWrap}>{footerComponent}</View>}
+              {footerComponent && (
+                <View
+                  style={[
+                    styles.footerComponentWrap,
+                    { backgroundColor: colors.background, borderTopColor: colors.border },
+                  ]}
+                >
+                  {footerComponent}
+                </View>
+              )}
             </>
           )}
         </TouchableWithoutFeedback>
@@ -203,7 +229,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#ccc",
     padding: 16,
     borderRadius: 12,
   },
@@ -215,15 +240,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 8,
     marginTop: 16,
-    color: "#777",
     fontWeight: "500",
   },
   footerComponentWrap: {
-    borderTopColor: "#e2e2e2",
     borderTopWidth: 1,
     padding: 16,
     paddingBottom: 50,
-    backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: {
       width: 2,

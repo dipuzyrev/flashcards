@@ -1,3 +1,4 @@
+import { useTheme } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import * as React from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
@@ -5,11 +6,14 @@ import { SettingsStackParamList } from "~/types/navigation";
 
 type Props = NativeStackScreenProps<SettingsStackParamList, "SettingsHome">;
 const SettingsHome = ({ navigation }: Props) => {
+  const { colors } = useTheme();
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View>
-          <Text style={styles.subtitle}>Nothing here yet...</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+            Nothing here yet...
+          </Text>
         </View>
       </View>
     </SafeAreaView>
