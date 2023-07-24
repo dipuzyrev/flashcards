@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { SFSymbol } from "react-native-sfsymbols";
 import ExplanationScreen from "~/screens/ExplanationScreen/ExplanationScreen";
 import FlashcardListScreen from "~/screens/FlashcardListScreen";
 import HomeScreen from "~/screens/HomeScreen";
@@ -15,7 +14,6 @@ import {
   TabIcons,
   TabParamList,
 } from "~/types/navigation";
-// import { wordsToReviewCount } from '~/store/reducers/dictionarySlice';
 
 const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 const FlashcardsStack = createNativeStackNavigator<FlashcardsStackParamList>();
@@ -81,16 +79,11 @@ const RootScene = () => {
         headerShown: false,
         // tabBarBadge: route.name === 'Study' && wordsCount !== 0 ? wordsCount : undefined,
         tabBarIcon: ({ color, size }) => {
-          return (
-            <SFSymbol
-              name={TabIcons[route.name]}
-              weight="semibold"
-              color={color}
-              size={16}
-              resizeMode="center"
-              multicolor={false}
-            />
-          );
+          const Icon = TabIcons[route.name];
+          return <Icon width={20} height={20} color={color} />;
+        },
+        tabBarLabelStyle: {
+          fontWeight: "500",
         },
       })}
     >

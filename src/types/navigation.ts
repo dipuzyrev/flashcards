@@ -1,4 +1,7 @@
 import { NavigatorScreenParams } from "@react-navigation/native";
+import CardsIcon from "~/img/cards.svg";
+import HomeIcon from "~/img/home.svg";
+import SettingsIcon from "~/img/settings.svg";
 
 export type HomeStackParamList = {
   HomeScreen: undefined;
@@ -25,9 +28,9 @@ export enum RootScreens {
 }
 
 export const TabIcons = {
-  [RootScreens.Home]: "house.fill",
-  [RootScreens.Flashcards]: "lanyardcard.fill",
-  [RootScreens.Settings]: "gearshape.fill",
+  [RootScreens.Home]: HomeIcon,
+  [RootScreens.Flashcards]: CardsIcon,
+  [RootScreens.Settings]: SettingsIcon,
 };
 
 export type TabParamList = {
