@@ -153,7 +153,7 @@ const FlashcardSheet = ({
                 <View
                   style={[
                     styles.footerComponentWrap,
-                    { backgroundColor: colors.background, borderTopColor: colors.border },
+                    { backgroundColor: colors.surfaceSecondary, borderTopColor: colors.border },
                   ]}
                 >
                   {footerComponent}
