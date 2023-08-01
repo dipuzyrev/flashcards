@@ -93,16 +93,6 @@ const ExplanationScreen = ({ navigation, route }: Props) => {
     setFlashcardContent(undefined);
   };
 
-  // const dummyFlashcardContent = {
-  //   word: "apple",
-  //   type: "noun",
-  //   transcription: "[apple]",
-  //   meaning: "red / green fruit",
-  //   example: "I eat apples every day.",
-  //   synonyms: ["pear", "banana"],
-  //   antonyms: [""],
-  // };
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <FlashcardSheet

@@ -4,7 +4,6 @@ const wordAndContext = (word: string, context?: string) => {
   return `"${word}"` + (context ? ` in the context of "${context}"` : "");
 };
 
-// type Prompt = (prevResult?: string) => Message[];
 export const explanationPrompt = (
   word: string,
   context?: string
@@ -57,8 +56,6 @@ export const flashcardPrompt = (
           - type (part of speech, idiom, etc)
           - phonetic transcription
           - short example of usage\n- type (part of speech, idiom, etc)
-          - up to 2-3 synonyms
-          - up to 2-3 antonyms
 
         Flashcard example for word "comprehensive": {
           "word":"comprehensive",
@@ -66,43 +63,8 @@ export const flashcardPrompt = (
           "transcription":"kɒmprɪˈhensɪv",
           "example":"The report provides a comprehensive analysis.",
           "type":"adjective",
-          "synonyms":["complete","thorough","exhaustive"],
-          "antonyms":["limited","partial","incomplete"]
         }`,
       },
     ],
   ];
 };
-// export type FlashcardObject = {
-//   definition: string;
-//   type: string;
-//   example: string;
-//   synonyms: [string];
-//   antonyms: [string];
-// };
-
-// export const explanationPrompt = (word: string): Message[] => {
-//   return [
-//     {
-//       role: "system",
-//       content: `You assist in learning English. Your response must be in the JSON format using this structure: {"groups":[{"group":"","definitions":[{"meaning":"","example":""}]}]}`,
-//     },
-//     {
-//       role: "user",
-//       content: `Get common meanings for "${word}" but merge similar meanings in groups. Provide usage examples.`,
-//     },
-//   ];
-// };
-
-// export const explanationWithContextPrompt = (word: string, context: string): Message[] => {
-//   return [
-//     {
-//       role: "system",
-//       content: `You assist in learning English. Focus on Oxford or other dictionaries, providing general information about words meanings.`,
-//     },
-//     {
-//       role: "user",
-//       content: `Get meaning(s) of "${word}" in the context of "${context}". Provide example of usage.`,
-//     },
-//   ];
-// };

@@ -40,8 +40,6 @@ const FlashcardSheet = ({
   const [transcription, setTranscription] = React.useState(content?.transcription);
   const [meaning, setMeaning] = React.useState(content?.meaning);
   const [example, setExample] = React.useState(content?.example);
-  const [synonyms, setSynonyms] = React.useState(content?.synonyms ?? []);
-  const [antonyms, setAntonyms] = React.useState(content?.antonyms ?? []);
 
   React.useEffect(() => {
     setWord(content?.word);
@@ -49,8 +47,6 @@ const FlashcardSheet = ({
     setTranscription(content?.transcription);
     setMeaning(content?.meaning);
     setExample(content?.example);
-    setSynonyms(content?.synonyms ?? []);
-    setAntonyms(content?.antonyms ?? []);
   }, [content]);
 
   const updatedContent = React.useMemo(() => {
@@ -58,21 +54,12 @@ const FlashcardSheet = ({
       return;
     }
 
-    return { word, type, transcription, meaning, example, synonyms, antonyms } as IFlashcardContent;
-  }, [word, type, transcription, meaning, example, synonyms, antonyms]);
+    return { word, type, transcription, meaning, example } as IFlashcardContent;
+  }, [word, type, transcription, meaning, example]);
 
   React.useEffect(() => {
     setContentUpdate(updatedContent);
   });
-
-  const setWordsArray = (str: string, type: "synonyms" | "antonyms") => {
-    const array = str.split(",").map((v) => v.trim());
-    if (type === "synonyms") {
-      setSynonyms(str && array.length ? array : []);
-    } else {
-      setAntonyms(str && array.length ? array : []);
-    }
-  };
 
   return (
     <Modal
@@ -158,24 +145,6 @@ const FlashcardSheet = ({
                     value={example}
                     onChangeText={setExample}
                     placeholder="Example"
-                  />
-
-                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Synonyms</Text>
-                  <TextInput
-                    style={[styles.input, { color: colors.text, borderColor: colors.border }]}
-                    autoCapitalize="none"
-                    value={synonyms.join(", ")}
-                    onChangeText={(val) => setWordsArray(val, "synonyms")}
-                    placeholder="Synonyms"
-                  />
-
-                  <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>Antonyms</Text>
-                  <TextInput
-                    style={[styles.input, { color: colors.text, borderColor: colors.border }]}
-                    autoCapitalize="none"
-                    value={antonyms.join(", ")}
-                    onChangeText={(val) => setWordsArray(val, "antonyms")}
-                    placeholder="Antonyms"
                   />
                 </View>
                 <View style={{ height: footerComponent ? 0 : 50 }} />

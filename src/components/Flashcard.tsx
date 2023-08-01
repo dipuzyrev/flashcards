@@ -104,29 +104,6 @@ const FlashcardComponent = ({ flashcard, onFlip }: Props) => {
             “{definition.example}”
           </Text>
         </View>
-
-        {/* <View style={[styles.cardFooter, { opacity: flipped ? 1 : 0 }]}>
-          <View>
-            <Text style={styles.synonymsTitle}>Synonyms</Text>
-            {definition.synonyms.length ? (
-              definition.synonyms.map((synonym) => (
-                <Text style={styles.synonymItem}>{synonym}</Text>
-              ))
-            ) : (
-              <Text style={styles.synonymItem}>–</Text>
-            )}
-          </View>
-          <View>
-            <Text style={styles.synonymsTitle}>Antonyms</Text>
-            {definition.antonyms.length ? (
-              definition.antonyms.map((synonym) => (
-                <Text style={styles.antonymItem}>{synonym}</Text>
-              ))
-            ) : (
-              <Text style={styles.antonymItem}>–</Text>
-            )}
-          </View>
-        </View> */}
       </Pressable>
     </ImageBackground>
   );
@@ -157,11 +134,6 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   cardHeader: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  cardFooter: {
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -199,21 +171,6 @@ const styles = StyleSheet.create({
   },
   example: {
     fontSize: 15,
-  },
-
-  synonymsTitle: {
-    fontSize: 15,
-    textTransform: "uppercase",
-    marginBottom: 4,
-  },
-  synonymItem: {
-    fontSize: 15,
-    marginBottom: 2,
-  },
-  antonymItem: {
-    fontSize: 15,
-    marginBottom: 2,
-    textAlign: "right",
   },
 });
 

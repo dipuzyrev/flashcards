@@ -4,8 +4,6 @@ export interface IFlashcardContent {
   transcription: string;
   meaning: string;
   example: string;
-  synonyms: string[];
-  antonyms: string[];
 }
 
 type Direction = "toDefinition" | "fromDefinition";
