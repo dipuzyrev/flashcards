@@ -3,8 +3,8 @@ import dayjs from "dayjs";
 import { SuperMemoGrade } from "supermemo";
 import { RootState } from "~/store/store";
 import { IFlashcard, IFlashcardContent } from "~/types/dictionary";
-import { srsFunc } from "~/utils/spaced-repetition/anki-like-algorithm";
-import { getLateness } from "~/utils/spaced-repetition/lateness";
+import { srsFunc } from "~/utils/srs/anki-like";
+import { getLateness } from "~/utils/srs/lateness";
 
 interface FlashcardsState {
   definitions: Record<number, IFlashcardContent>;
@@ -89,7 +89,6 @@ export const dictionarySlice = createSlice({
         score: grade,
         lateness: getLateness(flashcard),
       });
-      // const {interval, repetition, efactor} = supermemo(flashcard, grade);
       const dueDate = dayjs(Date.now())
         .add(interval * 60 * 24, "minute")
         .toISOString();
@@ -101,8 +100,6 @@ export const dictionarySlice = createSlice({
 export const { addDefinitions, updateDefinition, deleteFlashcard, practice } =
   dictionarySlice.actions;
 export const selectDictionary = (state: RootState) => state.dictionary;
-// export const selectWords = (state: RootState) => state.dictionary.words;
-
 export const selectFlashcards = (state: RootState) => state.dictionary.flashcards;
 export const selectDefinitions = (state: RootState) => state.dictionary.definitions;
 
@@ -115,9 +112,5 @@ export const selectFlashcardsToReview = createSelector([selectFlashcards], (flas
   );
   return flashcardsToReview;
 });
-
-// export const selectFlashcardsToReviewCount = (state: RootState) => {
-//   return selectFlashcardsToReview(state).length;
-// };
 
 export default dictionarySlice.reducer;

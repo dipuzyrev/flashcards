@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import ExplanationScreen from "~/screens/ExplanationScreen/ExplanationScreen";
 import FlashcardListScreen from "~/screens/FlashcardListScreen";
 import HomeScreen from "~/screens/HomeScreen";
 import SettingsHome from "~/screens/SettingsHome";
@@ -28,11 +27,6 @@ function HomeStackScreen() {
     >
       <HomeStack.Screen name="HomeScreen" options={{ title: "Home" }} component={HomeScreen} />
       <HomeStack.Screen name="StudyCard" options={{ title: "Study Cards" }} component={StudyCard} />
-      <HomeStack.Screen
-        name="ExplanationScreen"
-        options={{ title: "Definitions" }}
-        component={ExplanationScreen}
-      />
     </HomeStack.Navigator>
   );
 }
@@ -72,12 +66,10 @@ function SettingsStackScreen() {
 const Tab = createBottomTabNavigator<TabParamList>();
 
 const RootScene = () => {
-  // const wordsCount = useAppSelector(wordsToReviewCount);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        // tabBarBadge: route.name === 'Study' && wordsCount !== 0 ? wordsCount : undefined,
         tabBarIcon: ({ color, size }) => {
           const Icon = TabIcons[route.name];
           return <Icon width={22} height={22} color={color} />;

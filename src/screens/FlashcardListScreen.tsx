@@ -13,7 +13,7 @@ import {
 import { IFlashcard, IFlashcardContent } from "~/types/dictionary";
 import { FlashcardsStackParamList } from "~/types/navigation";
 import { useAppDispatch, useAppSelector } from "~/types/store";
-import FlashcardSheet from "./ExplanationScreen/FlashcardSheet";
+import FlashcardSheet from "../components/FlashcardSheet";
 
 type Props = NativeStackScreenProps<FlashcardsStackParamList, "FlashcardListScreen">;
 const FlashcardListScreen = ({ navigation }: Props) => {

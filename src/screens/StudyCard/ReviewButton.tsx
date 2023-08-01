@@ -3,8 +3,8 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import { SuperMemoGrade } from "supermemo";
 import { IFlashcard } from "~/types/dictionary";
 import { humanizeDuration } from "~/utils/dates";
-import { srsFunc } from "~/utils/spaced-repetition/anki-like-algorithm";
-import { getLateness } from "~/utils/spaced-repetition/lateness";
+import { srsFunc } from "~/utils/srs/anki-like";
+import { getLateness } from "~/utils/srs/lateness";
 
 type ReviewButtonProps = {
   onPress: (grade: SuperMemoGrade) => void;

@@ -6,7 +6,7 @@ import FlashcardComponent from "~/components/Flashcard";
 import { practice, selectFlashcardsToReview } from "~/store/reducers/dictionarySlice";
 import { HomeStackParamList } from "~/types/navigation";
 import { useAppDispatch, useAppSelector } from "~/types/store";
-import { shuffleArray } from "~/utils/shuffle";
+import { shuffleArray } from "~/utils/misc";
 import ReviewButton from "./ReviewButton";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "StudyCard">;

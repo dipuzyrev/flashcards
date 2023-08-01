@@ -18,7 +18,7 @@ import { IFlashcardContent } from "~/types/dictionary";
 import { HomeStackParamList } from "~/types/navigation";
 import { useAppDispatch, useAppSelector } from "~/types/store";
 import { flashcardPrompt } from "~/utils/prompts";
-import FlashcardSheet from "./ExplanationScreen/FlashcardSheet";
+import FlashcardSheet from "../components/FlashcardSheet";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "HomeScreen">;
 const HomeScreen = ({ navigation }: Props) => {
