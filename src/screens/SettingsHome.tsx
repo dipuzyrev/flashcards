@@ -12,7 +12,7 @@ const SettingsHome = ({ navigation }: Props) => {
       <View style={styles.container}>
         <View>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            Nothing here yet...
+            Baked with ♥ by @dipuzyrev
           </Text>
         </View>
       </View>
